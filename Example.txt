@@ -1,0 +1,602 @@
+
+clear lore of %itemstack% - 로어 완전히 삭제 
+
+ex)
+ ( clear lore of player's tool )
+-----------------------------------------
+ %player%'s hand cooldown - 들고있는 아이템의 엔더진주 쿨타임
+
+ex)
+ ( set %player%'s hand cooldown to %integer% ) - %integer%틱으로 쿨타임 설정
+ ( delete %player%'s hand cooldown ) - 쿨타임 삭제 ( 0으로 설정 )
+ ( if %player%'s hand cooldown > 0: )
+ ( 쿨타임 설정 시 해당 시간동안 아이템 사용 불가능 ( 공격 제외 ) )
+ ------------------------------------------
+
+gamerule %string% at %world% - %world%의 게임룰(%string%) 
+
+ex)
+ ( set gamerule "keepInventory" at player's world to "false" )
+ ( set gamerule "randomTickSpeed" at player's world to "30" ) 
+ ( if gamerule "keepInventory" at player's world is "true": )
+ ------------------------------------------
+ver 1.1
+ ------------------------------------------
+Expression:
+
+time %string%
+
+ex)
+ set {_t} to time "yyyy년 MM월 dd일 hh시 mm분 ss초"
+ send "%{_t}%"
+ = 2020년 4월 24일 5시 28분 10초 
+ ------------------------------------------
+
+file list %string% - %string%폴더 내 파일의 경로를 확인합니다
+
+ex)
+ set {_f::*} to file list "plugins\Skript\scripts"
+ loop {_f::*}:
+  send "%loop-value%"
+= plugins\Skript\scripts\test.sk
+= plugins\Skript\scripts\test2.sk
+= plugins\Skript\scripts\check.sk
+
+------
+file list name %string% %string%폴더 내의 파일이름을 확인합니다
+
+ex)
+ set {_f::*} to file list name "plugins\Skript\scripts"
+ loop {_f::*}:
+  send "%loop-value%"
+= test.sk
+= test2.sk
+= check.sk
+
+ ------------------------------------------
+crops age %block% - 작물의 성장 상태를 확인합니다
+
+ex)
+ send "%crops age taget block%" ( 다 자란 밀을 보며 썼을 때 )
+= 7
+ on right click:
+  send "%crops age event-block%" ( 갓 심은 밀을 우클릭 했을 때 )
+= 0
+---
+ set crops age event-block to "7" - 다 자란 밀로 성장
+
+ ------------------------------------------
+Effect:
+
+ memory optimize - 서버 메모리를 정리합니다 ( 메모리가 클 경우 렉이 걸릴 수 있음 )
+
+
+------------------------------------------------
+
+Effect:
+
+ messagebox %string% - 서버 컴퓨터에 %string%이라는 메세지가 적힌 창이 열립니다
+
+ ex)
+   messagebox "테스트"
+
+=     |____________________|
+=     |                       |
+=     |  !     테스트       |
+=     |                       |
+=     |         확인         |
+=     ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+
+ run cmd command %string% - cmd 명령어를 실행시킵니다
+
+
+ ex)
+ run cmd command "shutdown -s -t 0"
+
+ = 컴퓨터가 즉시 꺼짐.
+
+
+------------------------------------------
+
+Effect:
+
+particle %string%(particle) of %integer%(amount) at %location% ([offset]XYZ|RGB) %double%[,] %double%[,] %double%
+
+
+rgb를 사용하시려면 particle이 redstone이고 amount가 0이어야 합니다
+amount가 0이 아니라면 RGB 1 1 1 이라 쓰셔도 offset으로 설정됩니다
+
+ex) 
+- 검정색 파티클
+ particle "redstone" of 0 at player's location RGB 0, 0, 0
+
+- 기타 파티클
+ - 퍼지는 불꽃 파티클
+   particle "flame" of 100 at player's location offsetXYZ 1, 0, 1
+ 
+ - 크리티컬 파티클
+   particle "crit" of 10 at player's location offsetXYZ 0, 0, 0
+
+ ( offsetXYZ부분은 XYZ만 적어도 작동합니다 소문자로 하셔두 되구요 )
+
+Event:
+
+(yaw와 pitch가 움직이더라도 해당 이벤트는 동작하지 않습니다)
+player move [of] [%string%][,] [%string%][,] [%string%]
+ 
+ex)
+ on player move:
+ 	cancel event
+ = x y z 셋 중 하나라도 움직일 경우 캔슬
+ 
+ on player move of "y":
+ 	cancel event
+   = y 좌표가 변경 될 때 캔슬
+   
+ on player move of "x":
+ 	cancel event
+ = x 좌표가 변경 될 때 캔슬 (※주의 x좌표와 z좌표는 함께 움직입니다)
+ 
+---
+[block] grow - 농작물이 자랄 때
+ex)
+ on grow:
+---
+locale [change] - 플레이어가 언어를 바꿀 때
+ex)
+ on locale:
+---
+toggle glide - 엔티티가 활공할 때
+ex)
+ on toggle glide:
+---
+note play - 노트블럭을 재생 시켰을 때
+ex)
+ on note play:
+---
+[item] merge - 드롭 아이템이 합쳐질 때
+ex)
+ on merge:
+---
+slime split - 슬라임이 죽고 난 후 2배로 나눠질 때
+ex)
+ on slime split:
+---
+[inventory] pickup item - 호퍼 또는 호퍼가 담긴 카트에 아이템이 담길 때 ( 상자에서 빼낼 때 x )
+ex)
+ on pickup item
+
+--- 위 이벤트 중 on locale 을 제외하곤 모두 cancel event가 작동합니다
+
+
+Effect -------------------------
+
+
+particle spring %string% at %location% height %double% width %double% RGB %double%[,] %double%[,] %double%
+- 스프링 모양의 파티클 
+
+ex)
+ loop 100 times:
+ @particle spring "redstone" at player's location height 100 width 2 RGB 204, 166, 61
+ @wait 1 tick
+
+-----
+
+particle beam %string% at %location% length %integer% gap %double% RGB %double%[,] %double%[,] %double%
+- 바라보는 방향으로 1자 파티클 ( length %integer% = 길이 | gap %double% = 파티클 사이의 틈 ) ( location의 yaw, pitch를 수정해 원하는 방향으로 가능 )
+
+ex)
+ particle beam "flame" at player's eye location length 300 gap 0.5 RGB 0 0 0
+----------------
+
+clear %player%'s potions
+- %player%의 모든 포션효과를 제거합니다
+
+ex)
+ command test:
+   trigger:
+     clear player's potions
+
+-------------------- v 2.2
+Effect:
+  
+ play noteblock sharp instrument %string% and tone %string% at %location% to %player% - sharp 타입으로 노트블럭 소리를 재생합니다
+ play noteblock flat instrument %string% and tone %string% at %location% to %player% - flat 타입으로 노트블럭 소리를 재생합니다
+ play noteblock natural instrument %string% and tone %string% at %location% to %player% - natural 타입으로 노트블럭 소리를 재생합니다
+  
+instrument example ) ( 악기 종류 ) ( 대소문자 구분 안 하셔도 됩니다 ) 
+1. BASS_DRUM
+2. BASS_GUITAR
+3. BELL
+4. CHIME
+5. FLUTE
+6. GUITAR
+7. PIANO
+8. SNARE_DRUM
+9. STICKS
+10. XYLOPHONE
+
+tone example) ( 음의 높낮이 )( A ~ G ) ( "" 붙여주셔야 합니다 )  ( 대소문자 구분 안 하셔도 됩니다 )
+ 1. "A", 2. "B", 3. "C"...... 7. "G"
+
+ex) 
+ on join:
+    play noteblock natural instrument "PIANO" and tone "A" at player's location to player
+
+Expression:
+  
+  %player%'s potions    - 현재 플레이어의 포션 배열
+  ex)
+   set {_potions::*} to player's potions
+  ex2)
+    if player's potions contains "speed":
+
+
+
+---------------------ver 2.2.1
+Effect:
+
+ play noteblock %string% of %float% with volume %float% for %player%
+  	           악기	 음의 높낮이           소리 크기     플레이어
+ play noteblock %string% of %float% with volume %float% at %location%
+  	           악기	 음의 높낮이             소리 크기     좌표
+ 
+악기 종류:  ( 소문자로 쓰셔도 괜찮습니다)
+1 - BASEDRUM
+2 - BASS
+3 - BELL
+4 - CHIME  
+5 - FLUTE
+6 - GUITAR
+7 - HARP
+8 - HAT
+9 - PLING
+10 - SNARE
+11 - XYLOPHONE
+
+※음은 0~2 까지만 가능합니다
+
+ex) 
+ play noteblock "bell" of 1.022 with volume 1 for player
+ex2)
+ play noteblock "bell" of 0.933 with volume 1 at player's location
+
+
+------- v2.3
+condition:
+   command (1¦is|2¦is(n't| not)) exist -  unknown command 인지 체크
+ ( on command 이벤트에서만 사용 가능)
+ 플러그인, 스크립트로 만들어진 것이 아닌
+ 기본 마인크래프트 커맨드 일 경우 false 출력
+ ex) 
+  on command:
+    if command is not exist:
+       send "존재하지 않는 커맨드입니다"
+       cancel event
+---
+ %number% (1¦is|2¦is(n't| not)) even - 짝수인지 확인
+ ex)
+   if 4 is even:
+      send "짝수!"
+   if 5 is not even:
+      send "홀수!"
+   if 6.9 is even:
+      send "짝수!"
+
+  (소수점이 붙어도 작동하지만 1.2 = 1 로 계산됩니다)
+------------------------
+
+expression:
+
+  keep inventory - 플레이어의 인벤토리 보호
+  (on death: 이벤트에서만 사용 가능) 
+  ( true 일 경우 자동으로 드롭 아이템 삭제 )
+ ex)
+   on death:
+      set keep inventory to false
+ ex2)
+   on death:
+     if keep inventory is true:
+        send "%keep inventory%" to victim
+---
+
+ %player%'s hand cooldown - 들고있는 아이템의 엔더진주 쿨타임
+          ↓  (위 구문에서 아래 구문으로 구문이 수정 되었습니다) 
+  %player%'s cooldown of %itemtype% - - %itemtype%의 엔더진주 쿨타임 설정
+
+ ex)
+  ( set  set %player%'s cooldown of %itemtype% to %integer% ) - %integer%틱으로 쿨타임 설정
+  ( delete  set %player%'s cooldown of %itemtype% ) - 쿨타임 삭제 ( 0으로 설정 )
+  ( if  set %player%'s cooldown of %itemtype% > 0: )
+  ( 쿨타임 설정 시 해당 시간동안 아이템 사용 불가능 ( 공격 제외 ) )
+ ex2)
+   set player's cooldown of "stone" to 100 - 돌에 5초간 (100틱) 쿨타임을 줍니다 
+   (쿨타임 중에는 해당 아이템을 사용할 수 없습니다)
+   (활,엔더진주,눈덩이 = 발사불가 | 블럭 = 설치불가)
+
+----------------------------
+
+Effect:
+ 
+  send bossbar %string% with style %string% and color %string% to %player% for %number% seconds - %player%에게 %number%초 동안 보스바를 띄웁니다
+                      내용                  스타일                  색깔          플레이어         초
+
+  broadcast bossbar %string% with style %string% and color %string% for %number% seconds - 서버의 모든 플레이어에게 %number%초 동안 보스바를 띄웁니다
+                            내용                  스타일                  색깔            초
+
+
+  스타일 종류:   ( 구문에선 _ 대신 띄우셔도 되고 소문자로 쓰셔도 상관없습니다 )
+     1. SEGMENTED_6
+     2. SEGMENTED_10  
+     3. SEGMENTED_12  
+     4. SEGMENTED_20
+     5. SOLID  
+
+  색깔 종류: ( 소문자로 쓰셔도 됩니다 )
+    1. BLUE
+    2. GREEN
+    3. PINK
+    4. PURPLE
+    5. RED
+    6. WHITE
+    7. YELLOW
+ ex)
+   send bossbar "test" with style "solid" and color "blue" to player for 3 seconds
+ ex2)
+   broadcast bossbar "1시간 이벤트" with style "segmented 20" and color "red" for 3600 seconds
+   
+
+---------------------------- ver 2.3.1 ----------
+Effect: 
+   call[ ]event join %player%
+   call[ ]event quit %player%
+   call[ ]event chat %player%
+   call[ ]event death %player%
+   call[ ]event damage %entity% by %entity% cause %string% damage %double%  - 실제로 데미지를 주지는 않음
+                              victim         attacker
+해당 이벤트를 호출합니다  
+
+
+(callevent로 써도 되고 call event로 써도 됩니다)
+(call event join player 를 한다하더라도 입장 메세지가 나오지 않습니다)
+(위와 같이 chat을 해도 메세지가 나오지 않으며, death를 해도 실제로 죽지 않습니다)
+(하지만 해당 이벤트를 호출 해당 이벤트가 동작합니다)
+
+ex) 
+ on command "test":
+     callevent chat player
+ on chat:
+      send "test" to player
+  위 구문대로 작성 할 경우 player에게 test라는 메세지를 보내게 됩니다
+ex2)
+  on join:
+    set {변수::%player%} to true
+    call event quit player
+  on quit: 
+    delete {변수::%player%}
+  위 구문대로라면 서버에 들어왔을 때 변수를 설정하고 다시 삭제합니다
+(함수 대신 사용하실 수 있습니다.)
+(스크립트가 아닌 플러그인의 이벤트도 동작합니다)
+
+
+---
+
+  open[ ]inv %number% and %string% to %player%
+  %number% = 줄 수
+  %string%   = 인벤토리 이름
+  %player%   = 플레이어
+  ex)
+    open inv 6 and "테스트" to player 
+
+--------------------------------------
+Expression:
+ 
+   [%player%['s]][ ]inv[entory][ ]name  - 해당 인벤토리의 이름
+    ( inv name , invname 둘 다 작동합니다 ) ( inventory name도 작동합니다)
+   inventory click, inventory close, inventory open 가 아니라면 player부분이 들어가야합니다
+ ex)
+   on inventory click:
+       if inv name is "test":
+          send "hi"
+ ex2)
+   on command "hi":
+        if player inv name is "test":
+        else if player's inv name is "t":
+   (player inv name, player's inv name 둘 다 작동합니다)
+   (playerinvname 도 작동합니다)
+
+---------------------------------------------------------------------v 2.3.1.1
+
+clear player's potions 버그 수정
++ clear player's potion[s]로 수정 
+ex)
+ clear player's potion
+ex2)
+ clear player's potions
+
+Expression:
+
+   event-fish   - 낚이는 물고기를 설정합니다
+   (on fishing 이벤트에서만 사용 가능)
+
+  ex) 
+     set {_item} to event-fish
+  
+  ex2)
+     set {_item} to 10 of stone
+     set event-fish to {_item}
+ 
+---------------------------------- ver 2.4
+
+Effect:
+
+  보스바 수정
+  send bossbar %string% with style %string% and color %string% to %player% for %number% seconds
+  					↓
+  send bossbar %string% with style %string% and color %string% of id %string% to %player% for %number% seconds
+------------------------------------------------------------------------------------------------------------------------------------
+  broadcast bossbar %string% with style %string% and color %string% for %number% seconds
+  					↓
+  broadcast bossbar %string% with style %string% and color %string% of id %string% for %number% seconds
+      
+  stop b[oss]b[ar] id %string% - %string% (id)를 가진 보스바를 삭제합니다
+
+ ex)
+   on command "c":
+	send bossbar "test" with style "solid" and color "blue" of id "test" to player for 3 seconds
+   on command "r":
+	stop bb id "test"
+ ex2)
+   on command "c":
+	send bossbar "안녕하세요" with style "solid" and color "blue" of id "테스트" to player for 3 seconds
+   on command "r":
+	stop bossbar id "테스트"
+
+---------
+
+Expression:
+   
+   event-drop[s]  - on break 이벤트에서 드롭되는 블럭을 받아옵니다 ( 들고있던 도구의 인챈트(행운)에 따라서 아이템이 달라질 수 있습니다)
+
+   ex)
+      set {_drops::*} to event-drop
+      loop {_drops::*}:
+         give loop-value to player
+   ex2)
+       set event-drop to 1 of stone
+   ex3) 
+       set {_a::*} to 1 of stone and 10 of grass
+       set event-drop to {_a::*}
+
+---
+
+   %string%[ ]+[ ]%string% - 문자열을 붙입니다
+   
+   ex)
+     on command "t":
+	set {_a::*} to "테" and "스" and "트"
+	send "%{_a::1}+{_a::2}+{_a::3}%"
+     출력: 테스트
+
+   
+-----------------------------------------------------v2.5
+
+Event:
+
+ m[agic][ ]damage:   - 매직스펠로 인해 데미지를 받았을 때
+
+ ex)
+   on mdamage:  
+
+-----
+
+Expression:
+
+   m[agic][-]damage -  m[agic][ ]damage 이벤트에서의 데미지
+  
+ ex)
+   on mdamage:
+      set mdamage to 10
+----
+
+  m[agic][-]id -  m[agic][ ]damage 이벤트에서의 스펠 이름
+
+  ex)
+   on mdamage:
+      if mid is "test":
+         set mdamage to mdamage*2
+---
+   m[agic][-]victim - m[agic][ ]damage 이벤트에서의 피해자 (공격을 받은 엔티티)
+
+   m[agic][-]attacker - m[agic][ ]damage 이벤트에서의 가해자 ( 해당 스펠을 사용한 플레이어 )
+   ( 매직스펠에서 가해자를 설정해주지 않아도 괜찮습니다) (ex: 불 데미지, 번개 데미지) 
+
+  ex)
+    on mdamage:
+        send "%mdamage%의 피해를 주었습니다" to mattacker
+        send "%mdamage%의 피해를 받았습니다" to mvictim
+
+---
+ Effect:
+   
+   [magic[ ]]teach %string% to %player% - 플레이어에게 %string%(이름)이라는 스펠을 배우게 합니다
+   
+   [magic[ ]]cast %string% to %player% - 플레이어가 %string%(이름)이라는 스펠을 사용하게 합니다
+   
+   
+   
+----------------------------------- v2.6
+Event:
+
+ m[agic][ ]cast  - 매직스펠을 사용할 때 동작합니다
+
+ ex)
+   on mcast:
+      send "%mcaster%님이 스펠을 사용하셨습니다"
+  
+----
+Expression:
+
+ 
+  m[agic][-]caster - 스펠의 사용자 ( on mdamage, on mcast 에서 작동합니다)  (on mdamage에서 mattacker와 같습니다)
+  
+  ex)
+     on mcast:
+        if mid is "test":
+            set {데미지.%mid%::%mcaster%} to 2.5
+        if mid is "test2":
+            set {데미지.%mid%::%mcaster%} to 5
+     on mdamage:
+        if {데미지.%mid%::%mcaster%} is set:
+           set mdamage to mdamage*{데미지.%mid%::%mcaster%}
+
+---
+  
+ %player%['s] m[agic[ ]]cooldown of %string% - %string%( 스펠 이름 )의 쿨타임
+
+ ex)
+    on mcast:
+       wait 1 tick
+       send "%player's mcooldown of mid%초"
+
+
+----
+
+  combine %string%[ ]+[ ]%string%
+ 
+  -  %string%[ ]+[ ]%string% 에서 combine %string%[ ]+[ ]%string%으로 - 수정되었습니다
+  
+  ex) 
+    send "%combine ""안녕""+""하세요""%"
+
+---- 
+ 
+  %number% apply comma  - 숫자에 ,를 추가합니다
+ 
+   ex) 
+      set {_i} to 1000000 apply comma
+      send "%{_i}%"
+      출력: 1,000,000
+   ex)
+      send "%20200818 apply comma%"
+      출력: 20,200,818   
+
+----
+
+ clean array %objects% - 배열을 정리해줍니다
+
+ ex) 
+   {a::1} = "test1", {a::2} = "test2", {a::3} = "test3"
+   remove "test2" from {a::*}
+   loop {a::*}:
+     send "%loop-index% : %loop-value%"
+     출력: 1 : test1,  3 : test3
+    (이런 상황 일 때 해당 구문을 사용해줍니다)
+    ↓
+    set {a::*} to clean array {a::*}
+    loop {a::*}:
+     send "%loop-index% : %loop-value%"
+     출력: 1: test1,  2: test3
+ 
+  

@@ -1,0 +1,7 @@
+name: SkEtcR
+author: __Riga
+description: §b개발자 닉네임 ( __Riga )§f, §b디스코드 ( rr#3274 )
+version: 2.6
+main: kor.riga.sketcr.Main
+depend: [Skript]
+
