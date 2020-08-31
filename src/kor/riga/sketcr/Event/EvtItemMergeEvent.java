@@ -14,6 +14,7 @@ public class EvtItemMergeEvent extends SkriptEvent {
 		return true;
 	}
 
+	
 	@Override
 	public boolean check(Event e) {
 		return true;

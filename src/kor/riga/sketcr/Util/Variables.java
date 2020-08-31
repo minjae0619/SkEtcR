@@ -1,4 +1,4 @@
-package kor.riga.sketcr.etc;
+package kor.riga.sketcr.Util;
 
 import java.util.HashMap;
 

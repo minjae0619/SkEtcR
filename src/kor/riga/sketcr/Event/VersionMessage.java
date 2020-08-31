@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import kor.riga.sketcr.Main;
-import kor.riga.sketcr.etc.Variables;
+import kor.riga.sketcr.Util.Variables;
 
 public class VersionMessage implements Listener {
 
@@ -20,24 +20,21 @@ public class VersionMessage implements Listener {
 
 				@Override
 				public void run() {
-					player.sendMessage("§a[SkEtcR] SkEtcR이 적용된 서버입니다");
-					player.sendMessage("§a[SkEtcR] SkEtcR이 적용된 서버입니다");
-					player.sendMessage("§a[SkEtcR] SkEtcR이 적용된 서버입니다");
-					player.sendMessage("§a[SkEtcR] SkEtcR이 적용된 서버입니다");
-					player.sendMessage("§a[SkEtcR] SkEtcR이 적용된 서버입니다");
+					player.sendMessage("§a[SkEtcR] SkEtcR이 적용된 서버입니다  ( SkEtcR v" + Main .getInstance().getDescription().getVersion() + " )");
+					player.sendMessage("§a[SkEtcR] SkEtcR이 적용된 서버입니다  ( SkEtcR v" + Main .getInstance().getDescription().getVersion() + " )");
+					player.sendMessage("§a[SkEtcR] SkEtcR이 적용된 서버입니다  ( SkEtcR v" + Main .getInstance().getDescription().getVersion() + " )");
 				}
-			}, 10L);
+			}, 20L);
 		}
 		if (player.isOp()) {
-			System.out.println(Variables.getInstance().check);
 			if (Variables.getInstance().check) {
 				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
 					@Override
 					public void run() {
-						player.sendMessage("§a[ SkEtcR ] 최신버전이 존재합니다 ( 문의 : rr#3274 )");
-						player.sendMessage("§a[ SkEtcR ] 블로그 : https://blog.naver.com/pseongsil/222042861602");
+						player.sendMessage("§a[ SkEtcR ] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
+						player.sendMessage("§a[ SkEtcR ] 애드온 다운로드 블로그 : https://blog.naver.com/pseongsil/222042861602");
 					}
-				}, 10L);
+				}, 15L);
 			}
 		}
 	}

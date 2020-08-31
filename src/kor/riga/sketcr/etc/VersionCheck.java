@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import kor.riga.sketcr.Main;
+import kor.riga.sketcr.Util.Variables;
 
 public class VersionCheck extends Thread implements Runnable {
 
@@ -30,11 +31,11 @@ public class VersionCheck extends Thread implements Runnable {
 			String[] sy = ur.lines().<String>toArray(paramInt -> new String[paramInt]);
 			if (!sy[0].equals(Main.getInstance().getDescription().getVersion())) {
 				Variables.getInstance().check = true;
-				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 rr#3274 )");
-				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 rr#3274 )");
-				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 rr#3274 )");
-				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 rr#3274 )");
-				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 rr#3274 )");
+				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 _R#8668 )");
+				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 _R#8668 )");
+				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 _R#8668 )");
+				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 _R#8668 )");
+				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 _R#8668 )");
 				System.out.println("[SkEtcR] 블로그 : https://blog.naver.com/pseongsil/222042861602");
 			} 
 		} catch (UnsupportedEncodingException e) {

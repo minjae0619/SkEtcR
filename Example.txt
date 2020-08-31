@@ -599,4 +599,44 @@ Expression:
      send "%loop-index% : %loop-value%"
      출력: 1: test1,  2: test3
  
+----------------------------- ver 2.6.1
+
+ SkEtcR v2.6에 패치 된 MagicSpell 관련 버그 픽스
+
+Expression:
+  enchant of %number% in %itemstack% - 아이템에 인챈트를 설정합니다
+                    인챈트 코드     아이템
+
+  ex)
+     set enchant of 0 in player's tool to 5 
+      (들고있는 아이템을 보호 5로 설정합니다)
+  
+--------------------------------
+
+Effect:
+  sort index %objects% value %numbers% in %string% - index 와 value를 함께 %string% 변수에 정렬해줍니다
+
+  {_test::테} = 9
+  {_test::스} = 19
+  {_test::트} = 7         
+  ex) 
+     loop {_test::*}:
+         add loop-value to {_value::*}
+         add "%loop-index%" to {_index::*}
+     sort index {_index::*} value {_value::*} in "테스트"
+     loop size of {테스트value::*} times:
+         broadcast "%{테스트index::%loop-num%}% : %{테스트value::%loop-num%}%"      delete {테스트index::*}
+     delete {테스트value::*}
+
+--------   
+  
+  %player% op c[om]m[an]d %string% - 오피 권한으로 커맨드를 실행합니다 
+  ( /붙여도 되고 안 붙여도 됩니다 )
+ 
+  ex)
+     on command "test":
+         player op cmd "spawn"
+ 
+
+  
   

@@ -8,7 +8,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import kor.riga.sketcr.etc.Variables;
+import kor.riga.sketcr.Util.Variables;
 
 
 

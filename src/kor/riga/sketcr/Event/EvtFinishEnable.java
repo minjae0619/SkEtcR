@@ -2,12 +2,11 @@ package kor.riga.sketcr.Event;
 
 import org.bukkit.event.Event;
 
-
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 
-public class EvtMagicCast extends SkriptEvent {
+public class EvtFinishEnable extends SkriptEvent {
 	
 	@Override
 	public boolean init(Literal<?>[] args, int matchedPattern, ParseResult parseResult) {

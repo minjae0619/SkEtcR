@@ -29,7 +29,7 @@ public class ExpEnchant extends SimpleExpression<Number> {
     }
     @Override
     public String toString(@Nullable Event event, boolean b){
-    	return "enchant of %number% of %itemstack%";
+    	return "enchant of %number% in %itemstack%";
     }
 	@Override
     @Nullable

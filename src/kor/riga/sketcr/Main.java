@@ -18,6 +18,7 @@ import kor.riga.sketcr.Effect.EffCallDamage;
 import kor.riga.sketcr.Effect.EffCallDeath;
 import kor.riga.sketcr.Effect.EffCallJoin;
 import kor.riga.sketcr.Effect.EffCallQuit;
+import kor.riga.sketcr.Effect.EffCmdOp;
 import kor.riga.sketcr.Effect.EffLore;
 import kor.riga.sketcr.Effect.EffMagicCast;
 import kor.riga.sketcr.Effect.EffMagicTeach;
@@ -26,12 +27,14 @@ import kor.riga.sketcr.Effect.EffParticle;
 import kor.riga.sketcr.Effect.EffParticle2;
 import kor.riga.sketcr.Effect.EffParticle3;
 import kor.riga.sketcr.Effect.EffPotionClear;
+import kor.riga.sketcr.Effect.EffSort;
 import kor.riga.sketcr.Effect.LoreClear;
 import kor.riga.sketcr.Effect.Memory;
 import kor.riga.sketcr.Event.EvtBlockGrow;
 import kor.riga.sketcr.Event.EvtInventoryPickup;
 import kor.riga.sketcr.Event.EvtItemMergeEvent;
 import kor.riga.sketcr.Event.EvtLocaleChange;
+import kor.riga.sketcr.Event.EvtMagicCast;
 import kor.riga.sketcr.Event.EvtMagicDamage;
 import kor.riga.sketcr.Event.EvtNotePlay;
 import kor.riga.sketcr.Event.EvtPlayerMove;
@@ -52,6 +55,7 @@ import kor.riga.sketcr.Expression.ExpGetInventory;
 import kor.riga.sketcr.Expression.ExpKeepInventory;
 import kor.riga.sketcr.Expression.ExpMagicAttacker;
 import kor.riga.sketcr.Expression.ExpMagicCaster;
+import kor.riga.sketcr.Expression.ExpMagicCooldown;
 import kor.riga.sketcr.Expression.ExpMagicDamage;
 import kor.riga.sketcr.Expression.ExpMagicID;
 import kor.riga.sketcr.Expression.ExpMagicVictim;
@@ -67,8 +71,6 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.NotePlayEvent;
@@ -76,7 +78,6 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
-import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -105,9 +106,9 @@ public class Main extends JavaPlugin implements Listener {
 		File file = new File("plugins\\SkEtcR\\Example.txt");
 		file.delete();
 		saveResource("Example.txt", false);
-		this.getConfig().addDefault("개발자.닉네임", "__Riga");
-		this.getConfig().addDefault("개발자.디스코드", "rr#3274");
-		this.getConfig().addDefault("제작에 도움을 주신 분", "디코 : 짖지리#6654, 블로그 : https://blog.naver.com/pseongsil");
+		this.getConfig().addDefault("개발자.닉네임", "_____R");
+		this.getConfig().addDefault("개발자.디스코드", "_R#8668");
+		this.getConfig().addDefault("도움을 주신 분", "디코 : 짖지리#6654, 블로그 : https://blog.naver.com/pseongsil");
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
 		new VersionCheck().start();
@@ -118,11 +119,6 @@ public class Main extends JavaPlugin implements Listener {
 	public void onDisable() {
 	}
 
-	@EventHandler (priority = EventPriority.HIGHEST)
-	    public void onTabComplete(PlayerChatTabCompleteEvent e) {
-			System.out.println(123);
-	        e.getTabCompletions().clear();
-	}
 
 	private void register() {
 		if (Bukkit.getPluginManager().getPlugin("Skript") != null) {
@@ -150,7 +146,7 @@ public class Main extends JavaPlugin implements Listener {
 			Skript.registerExpression(ExpGetInventory.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "[%player%['s]][ ]inv[entory][ ]name" });
 			Skript.registerExpression(ExpEnchant.class, Number.class, ExpressionType.PROPERTY,
-					new String[] { "enchant of %number% of %itemstack%" });
+					new String[] { "enchant of %number% in %itemstack%" });
 			Skript.registerExpression(ExpAccess.class, Boolean.class, ExpressionType.PROPERTY,
 					new String[] { "%player%'s access" });
 			Skript.registerExpression(ExpComma.class, String.class, ExpressionType.PROPERTY,
@@ -162,6 +158,8 @@ public class Main extends JavaPlugin implements Listener {
 			Skript.registerExpression(ExpSort.class, Number.class, ExpressionType.PROPERTY,
 					new String[] { "sort in %numbers%" });
 			Skript.registerEffect(EFFEnchant.class, new String[] { "clear enchant of %itemstack%" });
+			Skript.registerEffect(EffCmdOp.class, new String[] { "%player% op c[om]m[an]d %string%" });
+			Skript.registerEffect(EffSort.class, new String[] { "sort index %objects% value %numbers% in %string%" });
 			Skript.registerEffect(EffCallDamage.class, new String[] { "call[ ]event damage %entity% by %entity% cause %string% damage %double%" });
 			Skript.registerEffect(EffCallChat.class, new String[] { "call[ ]event chat %player%" });
 			Skript.registerEffect(EffCallJoin.class, new String[] { "call[ ]event join %player%" });
@@ -223,10 +221,10 @@ public class Main extends JavaPlugin implements Listener {
 						new String[] { "m[agic][-]attacker" });
 				Skript.registerExpression(ExpMagicCaster.class, Player.class, ExpressionType.PROPERTY,
 						new String[] { "m[agic][-]caster" });
-				Skript.registerExpression(ExpMagicCaster.class, Player.class, ExpressionType.PROPERTY,
+				Skript.registerExpression(ExpMagicCooldown.class, Float.class, ExpressionType.PROPERTY,
 						new String[] { "m[agic][-]cooldown" });
 				Skript.registerEvent("damage", EvtMagicDamage.class, SpellApplyDamageEvent.class, "m[agic][ ]damage");
-				Skript.registerEvent("cast", EvtMagicDamage.class, SpellCastEvent.class, "m[agic][ ]cast");
+				Skript.registerEvent("cast", EvtMagicCast.class, SpellCastEvent.class, "m[agic][ ]cast");
 			}
 			return;
 		}
