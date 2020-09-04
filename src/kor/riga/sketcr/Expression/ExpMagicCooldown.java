@@ -20,14 +20,14 @@ public class ExpMagicCooldown extends SimpleExpression<Float> {
 	
 	@Override
 	public String toString(Event event, boolean b) {
-		return " %player%['s] m[agic[ ]]cooldown of %string%";
+		return "%player%['s] m[agic[ ]]cooldown of %string%";
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-		this.str = (Expression<String>) expressions[0];
-		this.player = (Expression<Player>) expressions[1];
+		this.player = (Expression<Player>) expressions[0];
+		this.str = (Expression<String>) expressions[1];
 		return true;
 	}
 

@@ -636,6 +636,43 @@ Effect:
   ex)
      on command "test":
          player op cmd "spawn"
+         
+         
+-------------------------------------------- v2.7
+etc:
+  mcooldown 버그 픽스
+
+  Config에 Packet 추가 - false로 설정 시 SkEtcR에 패킷을 보내지 않습니다 
+
+--- 
+
+Event:
+    riding key press - 탈 것을 타고 있는 도중 키를 누를 때 ( w, a, s, d, space, shift)
+    ( 말, 안장이 있는 돼지가 아닌 각종 동물, 몬스터, 아머스탠드에 타고 있어도 작동합니다 )
+    ( 12.2 는 cancel event 가능 , 15.2 는 cancel event 불가능 )
+    ( 꾹 누를 경우 여러번 호출되기에 따로 쿨타임을 넣는걸 추천드립니다 )
+    ( 쿨타임을 넣어야 원하는 대로 구현하기 쉬울 겁니다 ) 
+
+    Expression:
+       event-press           -     해당 이벤트에서 누른 키가 저장됩니다 ( String )
+
+  ex)
+      on riding key press:
+           if event-press is "shift":
+                cancel event
+           broadcast "%player%님이 %event-press% 버튼을 누르셨습니다"
+
+-----
+
+Effect:
+   enable damage particle - 데미지를 줬을 때 하트 파티클이 나오는 것을 true로 설정합니다
+   disable damage particle - 데미지를 줬을 때 하트 파티클이 나오는 것을 false로 설정합니다
+   (하트 이펙트 삭제)
+
+   ex)
+     on load:
+         disable damage paricle
+ 
  
 
   

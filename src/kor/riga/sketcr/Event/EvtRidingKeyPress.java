@@ -6,7 +6,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 
-public class EvtToggleGlide extends SkriptEvent {
+public class EvtRidingKeyPress extends SkriptEvent {
 	
 	@Override
 	public boolean init(Literal<?>[] args, int matchedPattern, ParseResult parseResult) {

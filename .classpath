@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/12.2버킷 - 복사본 - 복사본/craftbukkit.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/랜개12/plugins/MagicSpells-3.5-Release.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/12.2버킷 - 복사본 - 복사본 (2)/plugins/Skript 2.2dev.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/API/ProtocolLib - 1.15.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

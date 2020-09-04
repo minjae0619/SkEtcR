@@ -1,7 +1,5 @@
 package kor.riga.sketcr.Effect;
 
-
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -13,7 +11,7 @@ import ch.njol.util.Kleenean;
 public class EffCmdOp extends Effect {
 	private Expression<Player> player;
 	private Expression<String> cmd;
-	
+
 	@Override
 	public String toString(Event event, boolean b) {
 		return "%player% op c[om]m[an]d %string%";
@@ -30,18 +28,19 @@ public class EffCmdOp extends Effect {
 	@Override
 	protected void execute(Event event) {
 		Player player = this.player.getSingle(event);
+
 		String cmd = this.cmd.getSingle(event);
 		assert cmd != null;
-		if(cmd.startsWith("/"))
+		if (cmd.startsWith("/"))
 			cmd = cmd.substring(1);
-		if(player.isOp())
+		if (player.isOp())
 			Bukkit.getServer().dispatchCommand(player, cmd);
 		else {
 			player.setOp(true);
 			Bukkit.getServer().dispatchCommand(player, cmd);
 			player.setOp(false);
 		}
-			
+
 	}
 
 }

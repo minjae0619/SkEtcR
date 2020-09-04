@@ -28,7 +28,7 @@ public class LoreClear extends Effect{
 	}
 	@Override
 	protected void execute(Event event) {
-		ItemStack i = (ItemStack) item.getSingle(event);
+		ItemStack i = item.getSingle(event);
 		ItemMeta im = i.getItemMeta();
 		im.setLore(null);
 		i.setItemMeta(im);

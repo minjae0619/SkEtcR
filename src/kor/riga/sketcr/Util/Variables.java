@@ -16,6 +16,7 @@ public class Variables{
 	
 	public boolean stop; 
 	public boolean check; 
+	public boolean damageParticle;
 	public HashMap<String, BossBar> bossbarList;
 	
 	private Variables() {
@@ -23,6 +24,7 @@ public class Variables{
 		bossbarList = new HashMap<String, BossBar>();
 		stop  = true;
 		check  = false;
+		damageParticle = false;
 		
 	}
 	

@@ -3,17 +3,15 @@ package kor.riga.sketcr.Expression;
 
 import javax.annotation.Nullable;
 
-import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
-
-import com.nisovin.magicspells.events.SpellApplyDamageEvent;
 
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import kor.riga.sketcr.Util.Event.PlayerRidingKeyPressEvent;
 
-public class ExpMagicAttacker extends SimpleExpression<Entity> {
+public class ExpRidingKey extends SimpleExpression<String> {
 	
     @Override
     public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult){
@@ -21,15 +19,14 @@ public class ExpMagicAttacker extends SimpleExpression<Entity> {
     }
     @Override
     public String toString(@Nullable Event event, boolean b){
-    	return "m[agic][-]attacker";
+    	return "event-press";
     }
     @Override
-    protected Entity[] get(Event event) {
-    	if(!(event instanceof SpellApplyDamageEvent)) {
-    		return null;
-    	}
-    	SpellApplyDamageEvent e = ((SpellApplyDamageEvent)event);
-		return new Entity[]{ e.getCaster() };
+    protected String[] get(Event event) {
+    	if(!(event instanceof PlayerRidingKeyPressEvent))
+    		return new String[] { "null" };
+    	PlayerRidingKeyPressEvent e = (PlayerRidingKeyPressEvent)event;
+    	return new String[]{e.getPress()};
     	
     }
     @Override
@@ -38,8 +35,8 @@ public class ExpMagicAttacker extends SimpleExpression<Entity> {
     }
     
     @Override
-    public Class<? extends Entity> getReturnType(){
-    	return Entity.class;
+    public Class<? extends String> getReturnType(){
+    	return String.class;
     }
  
 }
