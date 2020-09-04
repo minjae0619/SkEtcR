@@ -66,6 +66,7 @@ import kor.riga.sketcr.Expression.ExpMagicVictim;
 import kor.riga.sketcr.Expression.ExpPotion;
 import kor.riga.sketcr.Expression.ExpRidingKey;
 import kor.riga.sketcr.Expression.ExpSort;
+import kor.riga.sketcr.Expression.ExplineChange;
 import kor.riga.sketcr.Expression.File_List;
 import kor.riga.sketcr.Expression.File_List_Name;
 import kor.riga.sketcr.Expression.Time;
@@ -106,17 +107,22 @@ public class Main extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		instance = this;
-		//apiList = new ArrayList<String>();
+		// apiList = new ArrayList<String>();
 		this.saveDefaultConfig();
-		if(!getConfig().isSet("Packet")) {
+		if (!getConfig().isSet("Packet")) {
 			new File("plugins//SkEtcR//config.yml").delete();
 			this.saveDefaultConfig();
 		}
-		if(getConfig().getBoolean("Packet"))
-			Packet.start();
-		else {
-			System.out.println("[SkEtcR] - 패킷을 사용하지 않습니다");
-			System.out.println("[SkEtcR] - 패킷을 사용하지 않습니다");
+		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
+			if (getConfig().getBoolean("Packet"))
+				Packet.start();
+			else {
+				System.out.println("[SkEtcR] - 패킷을 사용하지 않습니다");
+				System.out.println("[SkEtcR] - 패킷을 사용하지 않습니다");
+			}
+		}else {
+			System.out.println("ProtocolLib이 존재하지 않아 패킷을 사용하지 않습니다");
+			System.out.println("ProtocolLib이 존재하지 않아 패킷을 사용하지 않습니다");
 		}
 		// System.out.println(getDescription().getVersion());
 		register();
@@ -131,7 +137,7 @@ public class Main extends JavaPlugin implements Listener {
 
 	@Override
 	public void onDisable() {
-		//unloadAPI();
+		// unloadAPI();
 	}
 
 	private void register() {
@@ -171,6 +177,8 @@ public class Main extends JavaPlugin implements Listener {
 					new String[] { "clean array %objects%" });
 			Skript.registerExpression(ExpSort.class, Number.class, ExpressionType.PROPERTY,
 					new String[] { "sort in %numbers%" });
+			Skript.registerExpression(ExplineChange.class, String.class, ExpressionType.PROPERTY,
+					new String[] { "n" });
 			Skript.registerEffect(EFFEnchant.class, new String[] { "clear enchant of %itemstack%" });
 			Skript.registerEffect(EffCmdOp.class, new String[] { "%player% op c[om]m[an]d %string%" });
 			Skript.registerEffect(EffSort.class, new String[] { "sort index %objects% value %numbers% in %string%" });
@@ -228,7 +236,8 @@ public class Main extends JavaPlugin implements Listener {
 			// not)) keep");
 			// MagicSpells
 			if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
-				Skript.registerEvent("ride", EvtRidingKeyPress.class, PlayerRidingKeyPressEvent.class, "riding key press");
+				Skript.registerEvent("ride", EvtRidingKeyPress.class, PlayerRidingKeyPressEvent.class,
+						"riding key press");
 				Skript.registerExpression(ExpRidingKey.class, String.class, ExpressionType.PROPERTY,
 						new String[] { "event-press" });
 				Skript.registerEffect(EffEnableDamageParticle.class, new String[] { "enable damage particle" });
@@ -258,54 +267,31 @@ public class Main extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().disablePlugin(this);
 	}
 
-/*	private File tempFile;
-	private ArrayList<String> apiList;
-
-	private void unloadAPI() {
-		for (String s : apiList) {
-			File[] lf = tempFile.getParentFile().listFiles();
-			if (lf != null) {
-				for (File f : lf) {
-					if (f.getName().startsWith(s)) {
-						f.delete();
-					}
-				}
-			}
-		}
-	}
-
-	private void loadAPI(String str, String str2, String url) {
-		try {
-			tempFile = File.createTempFile(str, str2);
-			InputStream rin = getResource(url);
-			FileOutputStream fo = new FileOutputStream(tempFile);
-
-			int b;
-			while ((b = rin.read()) != -1) {
-				fo.write(b);
-			}
-			rin.close();
-			fo.close();
-
-			JarUtils.extractFromJar(tempFile.getName(), tempFile.getAbsolutePath());
-			addClassPath(JarUtils.getJarUrl(tempFile));
-			apiList.add(str);
-			System.out.println("완료");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void addClassPath(final URL url) throws IOException {
-		final URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-		final Class<URLClassLoader> sysclass = URLClassLoader.class;
-		try {
-			final Method method = sysclass.getDeclaredMethod("addURL", new Class[] { URL.class });
-			method.setAccessible(true);
-			method.invoke(sysloader, new Object[] { url });
-		} catch (final Throwable t) {
-			t.printStackTrace();
-			throw new IOException("Error adding " + url + " to system classloader");
-		}
-	}*/
+	/*
+	 * private File tempFile; private ArrayList<String> apiList;
+	 * 
+	 * private void unloadAPI() { for (String s : apiList) { File[] lf =
+	 * tempFile.getParentFile().listFiles(); if (lf != null) { for (File f : lf) {
+	 * if (f.getName().startsWith(s)) { f.delete(); } } } } }
+	 * 
+	 * private void loadAPI(String str, String str2, String url) { try { tempFile =
+	 * File.createTempFile(str, str2); InputStream rin = getResource(url);
+	 * FileOutputStream fo = new FileOutputStream(tempFile);
+	 * 
+	 * int b; while ((b = rin.read()) != -1) { fo.write(b); } rin.close();
+	 * fo.close();
+	 * 
+	 * JarUtils.extractFromJar(tempFile.getName(), tempFile.getAbsolutePath());
+	 * addClassPath(JarUtils.getJarUrl(tempFile)); apiList.add(str);
+	 * System.out.println("완료"); } catch (IOException e) { e.printStackTrace(); } }
+	 * 
+	 * private void addClassPath(final URL url) throws IOException { final
+	 * URLClassLoader sysloader = (URLClassLoader)
+	 * ClassLoader.getSystemClassLoader(); final Class<URLClassLoader> sysclass =
+	 * URLClassLoader.class; try { final Method method =
+	 * sysclass.getDeclaredMethod("addURL", new Class[] { URL.class });
+	 * method.setAccessible(true); method.invoke(sysloader, new Object[] { url }); }
+	 * catch (final Throwable t) { t.printStackTrace(); throw new
+	 * IOException("Error adding " + url + " to system classloader"); } }
+	 */
 }

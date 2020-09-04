@@ -672,7 +672,30 @@ Effect:
    ex)
      on load:
          disable damage paricle
+         
+         
+ ---------------------------- v2.7.1
+
+etc:
+  ProtocolLib이 없을 경우 모든 기능이 작동하지 않는 버그 수정
+  
+---
+Event:
+ player i[tem][ ]damage - 아이템의 내구도가 깎일 때
  
+ ex)
+    on player idamage:
+        cancel event
+---
+Expression:
+
+   n - 줄 바꿈
+
+  ex)
+   send "테%n%스%n%트"
+   = 테
+      스
+      트
  
 
   

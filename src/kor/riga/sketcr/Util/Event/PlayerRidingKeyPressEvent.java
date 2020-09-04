@@ -43,8 +43,6 @@ public class PlayerRidingKeyPressEvent extends PlayerEvent implements Cancellabl
 		return cancel;
 	}
 
-
-
 	public final void setCancelled(boolean cancel) {
 		this.cancel = cancel;
 	}

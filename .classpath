@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/12.2버킷 - 복사본 - 복사본/craftbukkit.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/랜개12/plugins/MagicSpells-3.5-Release.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/12.2버킷 - 복사본 - 복사본 (2)/plugins/Skript 2.2dev.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/API/ProtocolLib - 1.15.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/API/Skript 2.2dev37c.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/spigot-1.12.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/API/MagicSpells-3.5-Release.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
