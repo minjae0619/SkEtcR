@@ -6,11 +6,13 @@ import kor.riga.sketcr.Effect.EFFBossbar;
 import kor.riga.sketcr.Effect.EFFBroadcastBossbar;
 import kor.riga.sketcr.Effect.EFFEnchant;
 import kor.riga.sketcr.Effect.EFFMessageBox;
+import kor.riga.sketcr.Effect.EFFMs;
 import kor.riga.sketcr.Effect.EFFNoteBlockFlat;
 import kor.riga.sketcr.Effect.EFFNoteBlockNatural;
 import kor.riga.sketcr.Effect.EFFNoteBlockSharp;
 import kor.riga.sketcr.Effect.EFFNotePlay;
 import kor.riga.sketcr.Effect.EFFNotePlayPlayer;
+import kor.riga.sketcr.Effect.EFFNs;
 import kor.riga.sketcr.Effect.EFFRunCmdCommand;
 import kor.riga.sketcr.Effect.EFFStopBossbar;
 import kor.riga.sketcr.Effect.EffCallChat;
@@ -41,6 +43,7 @@ import kor.riga.sketcr.Event.EvtMagicCast;
 import kor.riga.sketcr.Event.EvtMagicDamage;
 import kor.riga.sketcr.Event.EvtNotePlay;
 import kor.riga.sketcr.Event.EvtPlayerMove;
+import kor.riga.sketcr.Event.EvtRealTime;
 import kor.riga.sketcr.Event.EvtRidingKeyPress;
 import kor.riga.sketcr.Event.EvtSlimeSplitEvent;
 import kor.riga.sketcr.Event.EvtToggleGlide;
@@ -63,15 +66,19 @@ import kor.riga.sketcr.Expression.ExpMagicCooldown;
 import kor.riga.sketcr.Expression.ExpMagicDamage;
 import kor.riga.sketcr.Expression.ExpMagicID;
 import kor.riga.sketcr.Expression.ExpMagicVictim;
+import kor.riga.sketcr.Expression.ExpMs;
+import kor.riga.sketcr.Expression.ExpNs;
 import kor.riga.sketcr.Expression.ExpPotion;
 import kor.riga.sketcr.Expression.ExpRidingKey;
 import kor.riga.sketcr.Expression.ExpSort;
 import kor.riga.sketcr.Expression.ExplineChange;
-import kor.riga.sketcr.Expression.File_List;
-import kor.riga.sketcr.Expression.File_List_Name;
+import kor.riga.sketcr.Expression.ExpFileList;
+import kor.riga.sketcr.Expression.ExpFileListName;
 import kor.riga.sketcr.Expression.Time;
 import kor.riga.sketcr.Util.Packet;
+import kor.riga.sketcr.Util.Repeat;
 import kor.riga.sketcr.Util.Event.PlayerRidingKeyPressEvent;
+import kor.riga.sketcr.Util.Event.RealTimeEvent;
 import kor.riga.sketcr.etc.VersionCheck;
 
 import java.io.File;
@@ -124,13 +131,14 @@ public class Main extends JavaPlugin implements Listener {
 			System.out.println("ProtocolLib이 존재하지 않아 패킷을 사용하지 않습니다");
 			System.out.println("ProtocolLib이 존재하지 않아 패킷을 사용하지 않습니다");
 		}
-		// System.out.println(getDescription().getVersion());
+		//System.out.println(getDescription().getVersion());
 		register();
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		Bukkit.getServer().getPluginManager().registerEvents(new VersionMessage(), this);
 		File file = new File("plugins\\SkEtcR\\Example.txt");
 		file.delete();
 		saveResource("Example.txt", false);
+		Repeat.callTimeEvent();
 		new VersionCheck().start();
 
 	}
@@ -157,11 +165,11 @@ public class Main extends JavaPlugin implements Listener {
 					new String[] { "crops age %block%" });
 			Skript.registerExpression(Time.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "time %string%" });
-			Skript.registerExpression(File_List.class, String.class, ExpressionType.PROPERTY,
+			Skript.registerExpression(ExpFileList.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "file list %string%" });
 			Skript.registerExpression(ExpPotion.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "%player%'s potion[s]" });
-			Skript.registerExpression(File_List_Name.class, String.class, ExpressionType.PROPERTY,
+			Skript.registerExpression(ExpFileListName.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "file list name %string%" });
 			Skript.registerExpression(ExpGetInventory.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "[%player%['s]][ ]inv[entory][ ]name" });
@@ -179,6 +187,12 @@ public class Main extends JavaPlugin implements Listener {
 					new String[] { "sort in %numbers%" });
 			Skript.registerExpression(ExplineChange.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "n" });
+			Skript.registerExpression(ExpMs.class, String.class, ExpressionType.PROPERTY,
+					new String[] { "ms of %string%" });
+			Skript.registerExpression(ExpNs.class, String.class, ExpressionType.PROPERTY,
+					new String[] { "ns of %string%" });
+			Skript.registerEffect(EFFMs.class, new String[] { "start ms of %string%" });
+			Skript.registerEffect(EFFNs.class, new String[] { "start ns of %string%" });
 			Skript.registerEffect(EFFEnchant.class, new String[] { "clear enchant of %itemstack%" });
 			Skript.registerEffect(EffCmdOp.class, new String[] { "%player% op c[om]m[an]d %string%" });
 			Skript.registerEffect(EffSort.class, new String[] { "sort index %objects% value %numbers% in %string%" });
@@ -226,6 +240,7 @@ public class Main extends JavaPlugin implements Listener {
 			Skript.registerEvent("NotePlay", EvtNotePlay.class, NotePlayEvent.class, "note play");
 			Skript.registerEvent("merge", EvtItemMergeEvent.class, ItemMergeEvent.class, "[item] merge");
 			Skript.registerEvent("slime", EvtSlimeSplitEvent.class, SlimeSplitEvent.class, "slime split");
+			Skript.registerEvent("realtime", EvtRealTime.class, RealTimeEvent.class, "[real][ ]time at %string%");
 			Skript.registerEvent("itemDamage", EvtItemDamage.class, PlayerRidingKeyPressEvent.class,
 					"player i[tem][ ]damage");
 			Skript.registerEvent("inv pickup", EvtInventoryPickup.class, InventoryPickupItemEvent.class,

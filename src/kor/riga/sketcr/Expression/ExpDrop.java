@@ -1,5 +1,6 @@
 package kor.riga.sketcr.Expression;
 
+
 import javax.annotation.Nullable;
 
 import org.bukkit.event.Event;
@@ -32,13 +33,13 @@ public class ExpDrop extends SimpleExpression<ItemStack> {
 	protected ItemStack[] get(Event event) {
 		if (event instanceof BlockBreakEvent) {
 			BlockBreakEvent e = (BlockBreakEvent) event;
-			ItemStack[] al = new ItemStack[e.getBlock().getDrops(e.getPlayer().getItemInHand()).size()];
+			ItemStack[]al = new ItemStack[e.getBlock().getDrops().size()+10];
 			int amount = 0;
 			for (ItemStack item : e.getBlock().getDrops(e.getPlayer().getItemInHand())) {
 				al[amount] = item;
 				amount++;
-				return al;
 			}
+			return al;
 		} else if (event instanceof EntityDeathEvent) {
 			EntityDeathEvent e = (EntityDeathEvent) event;
 			return (ItemStack[]) e.getDrops().toArray();

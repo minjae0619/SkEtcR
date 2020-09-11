@@ -11,7 +11,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 
-public class File_List_Name extends SimpleExpression<String> {
+public class ExpFileListName extends SimpleExpression<String> {
 	
 	private Expression<String> name;
     @SuppressWarnings("unchecked")

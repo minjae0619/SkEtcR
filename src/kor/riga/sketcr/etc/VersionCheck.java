@@ -31,12 +31,12 @@ public class VersionCheck extends Thread implements Runnable {
 			String[] sy = ur.lines().<String>toArray(paramInt -> new String[paramInt]);
 			if (!sy[0].equals(Main.getInstance().getDescription().getVersion())) {
 				Variables.getInstance().check = true;
-				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 _R#8668 )");
-				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 _R#8668 )");
-				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 _R#8668 )");
-				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 _R#8668 )");
-				System.out.println("[SkEtcR] 최신버전이 존재합니다 ( 디스코드 _R#8668 )");
-				System.out.println("[SkEtcR] 블로그 : https://blog.naver.com/pseongsil/222042861602");
+				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
+				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
+				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
+				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
+				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
+				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 블로그 : https://blog.naver.com/pseongsil/222042861602");
 			} 
 		} catch (UnsupportedEncodingException e) {
 		} catch (MalformedURLException e) {

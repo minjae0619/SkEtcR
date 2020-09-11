@@ -636,8 +636,9 @@ Effect:
   ex)
      on command "test":
          player op cmd "spawn"
-         
-         
+ 
+
+
 -------------------------------------------- v2.7
 etc:
   mcooldown 버그 픽스
@@ -672,9 +673,9 @@ Effect:
    ex)
      on load:
          disable damage paricle
-         
-         
- ---------------------------- v2.7.1
+ 
+    
+---------------------------- v2.7.1
 
 etc:
   ProtocolLib이 없을 경우 모든 기능이 작동하지 않는 버그 수정
@@ -691,12 +692,54 @@ Expression:
 
    n - 줄 바꿈
 
-  ex)
+ ex)
    send "테%n%스%n%트"
    = 테
       스
       트
- 
 
-  
-  
+
+------------------------------ v2.8
+
+
+Event:
+  time at %string% - 실제 시간이 nn시:nn분:nn초 일 때 호출합니다
+
+  ex)
+    on time at "15:00:00":
+       broadcast "핫타임!"
+
+--------
+
+Effect, Expression:
+
+    start ms of %string% - ms 계산을 시작합니다 
+    (MilliSecond =  1/1000초) 
+
+    start ns of %string% - ns 계산을 시작합니다
+    (NanoSecond =  1/1000000000(10^9)초)
+
+     ms of %string%
+     ns of %string%
+
+     (%string%은 key입니다)   
+     따로 종료하지 않아도 되며, 
+     String으로 반환됩니다
+     
+     서버 Disable 시 값이 삭제됩니다
+     해당 기능을 사용하여도 서버에 어떠한 영향을 끼치지 않습니다  
+
+    ex)
+       on command "시작":
+           set {_str} to "시작%player%"
+           start ms of {_str}              #밀리세컨드
+       on command "종료":
+            set {_str} to "시작%player%"
+            send "%ms of {_str}%초"
+       =  22.296초
+    ex2)
+       on unload:
+            start ns of "reloadTime"     #나노세컨드
+       on load:
+             broadcas "%ns of ""reloadTime""%초"
+       =  0.0098626초

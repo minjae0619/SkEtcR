@@ -31,8 +31,10 @@ public class VersionMessage implements Listener {
 				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
 					@Override
 					public void run() {
-						player.sendMessage("§a[ SkEtcR ] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
-						player.sendMessage("§a[ SkEtcR ] 애드온 다운로드 블로그 : https://blog.naver.com/pseongsil/222042861602");
+						player.sendMessage("§a[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
+						player.sendMessage("§a[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
+						player.sendMessage("§a[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
+						player.sendMessage("§a[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 애드온 다운로드 블로그 : https://blog.naver.com/pseongsil/222042861602");
 					}
 				}, 15L);
 			}

@@ -2,7 +2,6 @@ package kor.riga.sketcr.Condition;
 
 
 import javax.annotation.Nullable;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.event.Event;
