@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
 import kor.riga.sketcr.Main;
 import kor.riga.sketcr.Util.Event.RealTimeEvent;
 
-public class Repeat {
+public class Repeat{
 
 	
 	
@@ -17,7 +17,7 @@ public class Repeat {
 			@Override
 			public void run() {
 				Calendar now = Calendar.getInstance();
-				SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
+				SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 				String time = format.format(now.getTime());
 		    	Bukkit.getServer().getPluginManager().callEvent(new RealTimeEvent(time));
 			}

@@ -40,8 +40,7 @@ public class EvtPlayerMove extends SkriptEvent {
 		if (this.z != null)
 			cz = this.z.getSingle(e).toLowerCase();
 		if (cx == null && cy == null && cz == null) {
-			if (x != newX || (y != newY) || (z != newZ))
-				return true;
+			return true;
 		}
 		try {
 			if (cx.equals("x") || cy.equals("x") || cz.equals("x"))

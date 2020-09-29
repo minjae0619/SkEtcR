@@ -1,3 +1,4 @@
+----------------------- v 1.0
 
 clear lore of %itemstack% - 로어 완전히 삭제 
 
@@ -20,8 +21,10 @@ ex)
  ( set gamerule "randomTickSpeed" at player's world to "30" ) 
  ( if gamerule "keepInventory" at player's world is "true": )
  ------------------------------------------
-ver 1.1
- ------------------------------------------
+
+--------------------------------------- v1.1
+
+
 Expression:
 
 time %string%
@@ -65,13 +68,20 @@ ex)
 ---
  set crops age event-block to "7" - 다 자란 밀로 성장
 
- ------------------------------------------
+
+
+ ------------------------------------------v 1.2
+
 Effect:
 
  memory optimize - 서버 메모리를 정리합니다 ( 메모리가 클 경우 렉이 걸릴 수 있음 )
 
+---
 
-------------------------------------------------
+ clear enchant of %itemstack% - %itemstack%의 인챈트를 제거합니다
+
+
+------------------------------------------------ v1.3
 
 Effect:
 
@@ -741,5 +751,23 @@ Effect, Expression:
        on unload:
             start ns of "reloadTime"     #나노세컨드
        on load:
-             broadcas "%ns of ""reloadTime""%초"
+             broadcast "%ns of ""reloadTime""%초"
        =  0.0098626초
+
+------------------------------------------------------ v2.8.1
+
+etc:
+   on time at "~~~" 오전, 오후 구별이 없던 점 수정
+
+
+Event:
+
+   advan open - 도전과제를 오픈 할 때 ( 기본 L 키 )
+
+   해당 이벤트를 캔슬 할 때 아주 잠깐 도전과제 창이 보일 수 있습니다.
+    패킷을 사용하기에 ProtocolLib 플러그인이 필요합니다.
+   ex)
+     on advan open:
+         cancel event
+         send "스텟창을 오픈합니다" 
+    

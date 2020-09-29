@@ -34,6 +34,7 @@ import kor.riga.sketcr.Effect.EffPotionClear;
 import kor.riga.sketcr.Effect.EffSort;
 import kor.riga.sketcr.Effect.LoreClear;
 import kor.riga.sketcr.Effect.Memory;
+import kor.riga.sketcr.Event.EvtAdvanOpen;
 import kor.riga.sketcr.Event.EvtBlockGrow;
 import kor.riga.sketcr.Event.EvtInventoryPickup;
 import kor.riga.sketcr.Event.EvtItemDamage;
@@ -77,6 +78,7 @@ import kor.riga.sketcr.Expression.ExpFileListName;
 import kor.riga.sketcr.Expression.Time;
 import kor.riga.sketcr.Util.Packet;
 import kor.riga.sketcr.Util.Repeat;
+import kor.riga.sketcr.Util.Event.AdvanOpenEvent;
 import kor.riga.sketcr.Util.Event.PlayerRidingKeyPressEvent;
 import kor.riga.sketcr.Util.Event.RealTimeEvent;
 import kor.riga.sketcr.etc.VersionCheck;
@@ -116,6 +118,10 @@ public class Main extends JavaPlugin implements Listener {
 		instance = this;
 		// apiList = new ArrayList<String>();
 		this.saveDefaultConfig();
+		try {
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		if (!getConfig().isSet("Packet")) {
 			new File("plugins//SkEtcR//config.yml").delete();
 			this.saveDefaultConfig();
@@ -140,7 +146,6 @@ public class Main extends JavaPlugin implements Listener {
 		saveResource("Example.txt", false);
 		Repeat.callTimeEvent();
 		new VersionCheck().start();
-
 	}
 
 	@Override
@@ -253,6 +258,8 @@ public class Main extends JavaPlugin implements Listener {
 			if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
 				Skript.registerEvent("ride", EvtRidingKeyPress.class, PlayerRidingKeyPressEvent.class,
 						"riding key press");
+				Skript.registerEvent("advan", EvtAdvanOpen.class, AdvanOpenEvent.class,
+						"advan open");
 				Skript.registerExpression(ExpRidingKey.class, String.class, ExpressionType.PROPERTY,
 						new String[] { "event-press" });
 				Skript.registerEffect(EffEnableDamageParticle.class, new String[] { "enable damage particle" });

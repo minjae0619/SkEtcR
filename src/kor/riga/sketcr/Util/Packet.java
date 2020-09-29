@@ -12,6 +12,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 
 import kor.riga.sketcr.Main;
+import kor.riga.sketcr.Util.Event.AdvanOpenEvent;
 import kor.riga.sketcr.Util.Event.PlayerRidingKeyPressEvent;
 
 public class Packet {
@@ -21,27 +22,68 @@ public class Packet {
 		System.out.println("[SkEtcR] 패킷을 사용합니다");
 		System.out.println("[SkEtcR] 패킷을 사용합니다");
 		steerVehicle(manager);
-		DamageParticleCancel(manager);
+		damageParticleCancel(manager);
+		advan(manager);
 	}
 
-	private static void DamageParticleCancel(ProtocolManager manager) {
-		
-		
+	private static void advan(ProtocolManager manager) {
+		manager.addPacketListener(
+				new PacketAdapter(Main.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Client.ADVANCEMENTS) {
+
+					@Override
+					public void onPacketReceiving(PacketEvent event) {
+						final Player player = event.getPlayer();
+						if (event.getPacketType() == PacketType.Play.Client.ADVANCEMENTS) {
+							if(!event.getPacket().getModifier().getValues().get(0).toString().equals("OPENED_TAB"))
+								return;
+							AdvanOpenEvent openEvent = new AdvanOpenEvent(player);
+							try {
+								Bukkit.getServer().getPluginManager().callEvent(openEvent);
+							} catch (Exception e) {
+								Bukkit.getScheduler().runTask(Main.getInstance(),
+										() -> Bukkit.getServer().getPluginManager().callEvent(openEvent));
+							}
+							if (openEvent.isCancelled()) {
+								player.closeInventory();
+							}
+						}
+					}
+
+				});
+	}
+/*
+	private static void handMove(ProtocolManager manager) {
+		manager.addPacketListener(
+				new PacketAdapter(Main.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Server.ANIMATION) {
+
+					@Override
+					public void onPacketSending(PacketEvent event) {
+						if (event.getPacketType() == PacketType.Play.Server.ANIMATION)
+							event.setCancelled(true);
+						// if (event.getPacket().getIntegers().read(1) == 4) {
+						// Bukkit.broadcastMessage("Criticals detected.");
+					}
+
+				});
+	}
+*/
+	private static void damageParticleCancel(ProtocolManager manager) {
+
 		manager.addPacketListener(
 				new PacketAdapter(Main.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Server.WORLD_PARTICLES) {
 
 					@Override
 					public void onPacketSending(PacketEvent event) {
 						if (event.getPacketType() == PacketType.Play.Server.WORLD_PARTICLES) {
-							for(EnumWrappers.Particle p : event.getPacket().getParticles().getValues()) {
-								if(p == EnumWrappers.Particle.DAMAGE_INDICATOR)
-									if(Variables.getInstance().damageParticle)
+							if (Variables.getInstance().damageParticle)
+								for (EnumWrappers.Particle p : event.getPacket().getParticles().getValues()) {
+									if (p == EnumWrappers.Particle.DAMAGE_INDICATOR)
 										event.setCancelled(true);
-							}
+								}
 						}
 					}
-					
-			});
+
+				});
 	}
 
 	private static void steerVehicle(ProtocolManager manager) {
