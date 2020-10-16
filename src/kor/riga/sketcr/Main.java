@@ -1,10 +1,35 @@
 package kor.riga.sketcr;
 
+import java.io.File;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockGrowEvent;
+import org.bukkit.event.block.NotePlayEvent;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.entity.ItemMergeEvent;
+import org.bukkit.event.entity.SlimeSplitEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.player.PlayerLocaleChangeEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
+
+import com.nisovin.magicspells.events.SpellApplyDamageEvent;
+import com.nisovin.magicspells.events.SpellCastEvent;
+
+import ch.njol.skript.Skript;
+import ch.njol.skript.lang.ExpressionType;
+import kor.riga.sketcr.Command.MainCommand;
 import kor.riga.sketcr.Condition.CommandAynchronous;
 import kor.riga.sketcr.Condition.CondEven;
 import kor.riga.sketcr.Effect.EFFBossbar;
 import kor.riga.sketcr.Effect.EFFBroadcastBossbar;
-import kor.riga.sketcr.Effect.EFFEnchant;
 import kor.riga.sketcr.Effect.EFFMessageBox;
 import kor.riga.sketcr.Effect.EFFMs;
 import kor.riga.sketcr.Effect.EFFNoteBlockFlat;
@@ -21,6 +46,8 @@ import kor.riga.sketcr.Effect.EffCallDeath;
 import kor.riga.sketcr.Effect.EffCallJoin;
 import kor.riga.sketcr.Effect.EffCallQuit;
 import kor.riga.sketcr.Effect.EffCmdOp;
+import kor.riga.sketcr.Effect.EffColorGlow;
+import kor.riga.sketcr.Effect.EffColorunGlow;
 import kor.riga.sketcr.Effect.EffDisableDamageParticle;
 import kor.riga.sketcr.Effect.EffEnableDamageParticle;
 import kor.riga.sketcr.Effect.EffLore;
@@ -30,7 +57,10 @@ import kor.riga.sketcr.Effect.EffOpenInv;
 import kor.riga.sketcr.Effect.EffParticle;
 import kor.riga.sketcr.Effect.EffParticle2;
 import kor.riga.sketcr.Effect.EffParticle3;
+import kor.riga.sketcr.Effect.EffPlayerResourcePack;
 import kor.riga.sketcr.Effect.EffPotionClear;
+import kor.riga.sketcr.Effect.EffResourceDisable;
+import kor.riga.sketcr.Effect.EffResourceEnable;
 import kor.riga.sketcr.Effect.EffSort;
 import kor.riga.sketcr.Effect.LoreClear;
 import kor.riga.sketcr.Effect.Memory;
@@ -43,11 +73,13 @@ import kor.riga.sketcr.Event.EvtLocaleChange;
 import kor.riga.sketcr.Event.EvtMagicCast;
 import kor.riga.sketcr.Event.EvtMagicDamage;
 import kor.riga.sketcr.Event.EvtNotePlay;
+import kor.riga.sketcr.Event.EvtPlayerJump;
 import kor.riga.sketcr.Event.EvtPlayerMove;
 import kor.riga.sketcr.Event.EvtRealTime;
 import kor.riga.sketcr.Event.EvtRidingKeyPress;
 import kor.riga.sketcr.Event.EvtSlimeSplitEvent;
 import kor.riga.sketcr.Event.EvtToggleGlide;
+import kor.riga.sketcr.Event.ResourcePackStatusListener;
 import kor.riga.sketcr.Event.VersionMessage;
 import kor.riga.sketcr.Expression.ExpAccess;
 import kor.riga.sketcr.Expression.ExpAddString;
@@ -57,6 +89,8 @@ import kor.riga.sketcr.Expression.ExpCooldown;
 import kor.riga.sketcr.Expression.ExpCrops_Age;
 import kor.riga.sketcr.Expression.ExpDrop;
 import kor.riga.sketcr.Expression.ExpEnchant;
+import kor.riga.sketcr.Expression.ExpFileList;
+import kor.riga.sketcr.Expression.ExpFileListName;
 import kor.riga.sketcr.Expression.ExpFish;
 import kor.riga.sketcr.Expression.ExpGameRules;
 import kor.riga.sketcr.Expression.ExpGetInventory;
@@ -69,42 +103,18 @@ import kor.riga.sketcr.Expression.ExpMagicID;
 import kor.riga.sketcr.Expression.ExpMagicVictim;
 import kor.riga.sketcr.Expression.ExpMs;
 import kor.riga.sketcr.Expression.ExpNs;
+import kor.riga.sketcr.Expression.ExpPlayerSwing;
 import kor.riga.sketcr.Expression.ExpPotion;
 import kor.riga.sketcr.Expression.ExpRidingKey;
 import kor.riga.sketcr.Expression.ExpSort;
+import kor.riga.sketcr.Expression.ExpTime;
 import kor.riga.sketcr.Expression.ExplineChange;
-import kor.riga.sketcr.Expression.ExpFileList;
-import kor.riga.sketcr.Expression.ExpFileListName;
-import kor.riga.sketcr.Expression.Time;
 import kor.riga.sketcr.Util.Packet;
 import kor.riga.sketcr.Util.Repeat;
+import kor.riga.sketcr.Util.VersionCheck;
 import kor.riga.sketcr.Util.Event.AdvanOpenEvent;
 import kor.riga.sketcr.Util.Event.PlayerRidingKeyPressEvent;
 import kor.riga.sketcr.Util.Event.RealTimeEvent;
-import kor.riga.sketcr.etc.VersionCheck;
-
-import java.io.File;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockGrowEvent;
-import org.bukkit.event.block.NotePlayEvent;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
-import org.bukkit.event.entity.ItemMergeEvent;
-import org.bukkit.event.entity.SlimeSplitEvent;
-import org.bukkit.event.inventory.InventoryPickupItemEvent;
-import org.bukkit.event.player.PlayerLocaleChangeEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import com.nisovin.magicspells.events.SpellApplyDamageEvent;
-import com.nisovin.magicspells.events.SpellCastEvent;
-
-import ch.njol.skript.Skript;
-import ch.njol.skript.lang.ExpressionType;
 
 public class Main extends JavaPlugin implements Listener {
 	private static Main instance = null;
@@ -113,15 +123,12 @@ public class Main extends JavaPlugin implements Listener {
 		return instance;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public void onEnable() {
 		instance = this;
-		// apiList = new ArrayList<String>();
+		new File("plugins\\SkEtcR\\config.yml").delete();
 		this.saveDefaultConfig();
-		try {
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 		if (!getConfig().isSet("Packet")) {
 			new File("plugins//SkEtcR//config.yml").delete();
 			this.saveDefaultConfig();
@@ -133,19 +140,28 @@ public class Main extends JavaPlugin implements Listener {
 				System.out.println("[SkEtcR] - 패킷을 사용하지 않습니다");
 				System.out.println("[SkEtcR] - 패킷을 사용하지 않습니다");
 			}
-		}else {
+		} else {
 			System.out.println("ProtocolLib이 존재하지 않아 패킷을 사용하지 않습니다");
 			System.out.println("ProtocolLib이 존재하지 않아 패킷을 사용하지 않습니다");
 		}
-		//System.out.println(getDescription().getVersion());
 		register();
-		Bukkit.getServer().getPluginManager().registerEvents(this, this);
-		Bukkit.getServer().getPluginManager().registerEvents(new VersionMessage(), this);
+		registerEvents();
 		File file = new File("plugins\\SkEtcR\\Example.txt");
 		file.delete();
 		saveResource("Example.txt", false);
 		Repeat.callTimeEvent();
+		File updateDirectory = new File("plugins\\SkEtcR\\Update");
+		if (!updateDirectory.exists())
+			updateDirectory.mkdir();
 		new VersionCheck().start();
+		registerBoard();
+		Class<?> c=null;if(c!=null)for(Object o : c.getEnumConstants()){o.notify();break;}
+	}
+
+	private void registerEvents() {
+		Bukkit.getServer().getPluginManager().registerEvents(this, this);
+		Bukkit.getServer().getPluginManager().registerEvents(new VersionMessage(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new ResourcePackStatusListener(), this);
 	}
 
 	@Override
@@ -153,7 +169,9 @@ public class Main extends JavaPlugin implements Listener {
 		// unloadAPI();
 	}
 
+	@SuppressWarnings("unused")
 	private void register() {
+		getCommand("sketcr").setExecutor(new MainCommand());
 		if (Bukkit.getPluginManager().getPlugin("Skript") != null) {
 			Skript.registerAddon(this);
 			Skript.registerExpression(ExpCooldown.class, Number.class, ExpressionType.PROPERTY,
@@ -168,7 +186,7 @@ public class Main extends JavaPlugin implements Listener {
 					new String[] { "combine %string%[ ]+[ ]%string%" });
 			Skript.registerExpression(ExpCrops_Age.class, Number.class, ExpressionType.PROPERTY,
 					new String[] { "crops age %block%" });
-			Skript.registerExpression(Time.class, String.class, ExpressionType.PROPERTY,
+			Skript.registerExpression(ExpTime.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "time %string%" });
 			Skript.registerExpression(ExpFileList.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "file list %string%" });
@@ -190,15 +208,18 @@ public class Main extends JavaPlugin implements Listener {
 					new String[] { "clean array %objects%" });
 			Skript.registerExpression(ExpSort.class, Number.class, ExpressionType.PROPERTY,
 					new String[] { "sort in %numbers%" });
-			Skript.registerExpression(ExplineChange.class, String.class, ExpressionType.PROPERTY,
-					new String[] { "n" });
+			Skript.registerExpression(ExplineChange.class, String.class, ExpressionType.PROPERTY, new String[] { "n" });
 			Skript.registerExpression(ExpMs.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "ms of %string%" });
 			Skript.registerExpression(ExpNs.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "ns of %string%" });
 			Skript.registerEffect(EFFMs.class, new String[] { "start ms of %string%" });
 			Skript.registerEffect(EFFNs.class, new String[] { "start ns of %string%" });
-			Skript.registerEffect(EFFEnchant.class, new String[] { "clear enchant of %itemstack%" });
+			Skript.registerEffect(EffPlayerResourcePack.class,
+					new String[] { "load resource[ ][pack] %player% at %string%" });
+			Skript.registerEffect(EffResourceEnable.class,
+					new String[] { "resource[ ][pack] enable[ kick message %string%]" });
+			Skript.registerEffect(EffResourceDisable.class, new String[] { "resource[ ][pack] disable" });
 			Skript.registerEffect(EffCmdOp.class, new String[] { "%player% op c[om]m[an]d %string%" });
 			Skript.registerEffect(EffSort.class, new String[] { "sort index %objects% value %numbers% in %string%" });
 			Skript.registerEffect(EffCallDamage.class,
@@ -226,6 +247,8 @@ public class Main extends JavaPlugin implements Listener {
 			Skript.registerEffect(EFFNotePlayPlayer.class,
 					new String[] { "play noteblock %string% of %float% with volume %float% for %player%" });
 			Skript.registerEffect(EffPotionClear.class, new String[] { "clear %player%'s potion[s]" });
+			Skript.registerEffect(EffColorGlow.class, new String[] { "color glow %string% to %entity%" });
+			Skript.registerEffect(EffColorunGlow.class, new String[] { "color unglow %string% to %entity%" });
 			Skript.registerEffect(EffLore.class, new String[] { "lore{%itemstack%, %number%, %string%}" });
 			Skript.registerEffect(LoreClear.class, new String[] { "clear lore of %itemstack%" });
 			Skript.registerEffect(EFFMessageBox.class, new String[] { "messagebox %string%" });
@@ -239,6 +262,7 @@ public class Main extends JavaPlugin implements Listener {
 			Skript.registerEffect(Memory.class, new String[] { "memory optimize" });
 			Skript.registerEvent("Player Move", EvtPlayerMove.class, PlayerMoveEvent.class,
 					"player move [of] [%string%][,] [%string%][,] [%string%]");
+			Skript.registerEvent("Player Jump", EvtPlayerJump.class, PlayerMoveEvent.class, "player jump");
 			Skript.registerEvent("block grow", EvtBlockGrow.class, BlockGrowEvent.class, "[block] grow");
 			Skript.registerEvent("locale", EvtLocaleChange.class, PlayerLocaleChangeEvent.class, "locale [change]");
 			Skript.registerEvent("glide", EvtToggleGlide.class, EntityToggleGlideEvent.class, "toggle glide");
@@ -256,10 +280,11 @@ public class Main extends JavaPlugin implements Listener {
 			// not)) keep");
 			// MagicSpells
 			if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
+				Skript.registerExpression(ExpPlayerSwing.class, Boolean.class, ExpressionType.PROPERTY,
+						new String[] { "%player%'s swing" });
 				Skript.registerEvent("ride", EvtRidingKeyPress.class, PlayerRidingKeyPressEvent.class,
 						"riding key press");
-				Skript.registerEvent("advan", EvtAdvanOpen.class, AdvanOpenEvent.class,
-						"advan open");
+				Skript.registerEvent("advan", EvtAdvanOpen.class, AdvanOpenEvent.class, "advan open");
 				Skript.registerExpression(ExpRidingKey.class, String.class, ExpressionType.PROPERTY,
 						new String[] { "event-press" });
 				Skript.registerEffect(EffEnableDamageParticle.class, new String[] { "enable damage particle" });
@@ -285,7 +310,7 @@ public class Main extends JavaPlugin implements Listener {
 			}
 			return;
 		}
-
+		Class<?> c=null;if(c!=null)for(Object o : c.getEnumConstants()){o.notify();break;}
 		Bukkit.getPluginManager().disablePlugin(this);
 	}
 
@@ -316,4 +341,30 @@ public class Main extends JavaPlugin implements Listener {
 	 * catch (final Throwable t) { t.printStackTrace(); throw new
 	 * IOException("Error adding " + url + " to system classloader"); } }
 	 */
+	private void registerBoard() {
+		Bukkit.getScheduler().runTask(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+				Team team = board.getTeam("aSkEtcRGlow");
+				if (team != null) 
+					return;
+				for (ChatColor c : ChatColor.values()) {
+					String name = c.getChar() + "SkEtcRGlow";
+					team = board.registerNewTeam(name);
+					if (Bukkit.getVersion().contains("1.12.2"))
+						Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+								"scoreboard teams option " + name + " color " + c.name());
+					else
+						team.setColor(c);
+					if (c == ChatColor.WHITE)
+						return;
+					//System.out.println("scoreboard teams option "+ name + " color " + c.name());
+				}				
+			}
+		});
+
+	}
+	
 }

@@ -5,29 +5,15 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
-public class PlayerRidingKeyPressEvent extends PlayerEvent implements Cancellable{
+public class CustomEvent extends PlayerEvent implements Cancellable{
 	private static final HandlerList handlers = new HandlerList();
 	
-	private String press;
 	private boolean cancel;
 	
+	private Object[] objects;
 
-	public String getPress() {
-		return press; 
-	}
-	
-
-
-
-	public void setPress(String press) {
-		this.press = press;
-	}
-
-
-
-	public PlayerRidingKeyPressEvent(Player player, String press) {
+	public CustomEvent(Player player) {
 		super(player);
-		this.press = press;
 	}
 
 

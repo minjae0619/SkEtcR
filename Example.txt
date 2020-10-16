@@ -771,3 +771,99 @@ Event:
          cancel event
          send "스텟창을 오픈합니다" 
     
+
+------------------------------------------------ v2.9
+
+etc:
+  
+  1. 콘피그 변경
+  2. 간편 업데이트
+  3. 커맨드 추가
+
+1 - config에 Auto Update가 추가되었습니다.  기본 값: false
+1.1 - 버전이 변경될 때마다 config가 다시 생성됩니다. (초기 값으로 변경)
+2 - AutoUpdate가 true일 경우 자동으로 plugins - SkEtcR - Update 폴더 내에 파일(Example 파일 포함)이 생성됩니다.
+3 - /sketcr이 추가되었습니다. 
+
+ ex)
+   /sketcr update
+ 수동 업데이트 입니다. 서버가 열려있는 상태에서도 최신 버전을 다시 확인하고 존재할 경우 
+ plugins - SkEtcR - Update 폴더에 파일을 다운로드 합니다.
+---------------
+Effect:
+  
+  load resource[ ][pack] %player% at %string% - %player%에게 %string%(리소스팩 주소)을 적용합니다.
+  
+  ex)
+    on command "리소스팩 적용"
+      load resource player at "https://www.naver.com"  ( 네이버는 예시입니다 )
+
+-----
+
+ resource[ ][pack] enable[ kick message %string%] - 리소스팩을 적용하지 않을 경우 강퇴합니다 
+ resource[ ][pack] disable - 리소스팩을 적용하지 않더라도 강퇴하지 않습니다
+ 
+
+ ex)
+   on load:
+      resource enable
+ ex2)
+   on load:
+      resource enable kick message "리소스팩을 적용해주세요"
+ ex3)
+   on load:
+      resource disable
+
+-----
+
+  color glow %string% to %entity%  - entity에게 색깔 발광을 입힙니다
+  color unglow %string% to %entity% - entity의 색깔 발광을 삭제합니다
+                     색깔코드
+  ex)
+    on drop:
+        color glow "a" to event-entity
+        wait 1 second
+        color unglow "a" to event-entity
+  ex2)
+    on spawn:
+        color glow "0" to event-entity
+        wait 5 second
+        color unglow "0" to event-entity
+
+
+
+----------------------
+
+Expression:
+
+   %player%'s swing - %player%가 좌클릭 등 손을 움직여도 다른 사람 눈에 보이지 않습니다.
+    ( Packet을 사용합니다 [ProtocolLib] 필요 )
+
+   ex)
+     on command:
+         set player's swing to true
+   ex2)
+     on command:
+         delete player's swing - 또는  set player's swing to false
+
+-------
+
+Event:
+  
+   player jump - 플레이어가 점프할 때
+
+   ex)
+     on player jump:
+          broadcast "점프"
+          
+          
+          
+------------------------ 2.9.1
+
+
+etc:
+
+    advan open (L키) 이벤트 동작 후 cancel event 사용 시 gui가 열리지 않는 버그 수정
+    
+    
+ 

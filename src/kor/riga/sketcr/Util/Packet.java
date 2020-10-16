@@ -1,6 +1,7 @@
 package kor.riga.sketcr.Util;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;
@@ -9,7 +10,6 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers;
 
 import kor.riga.sketcr.Main;
 import kor.riga.sketcr.Util.Event.AdvanOpenEvent;
@@ -24,17 +24,19 @@ public class Packet {
 		steerVehicle(manager);
 		damageParticleCancel(manager);
 		advan(manager);
+		handMove(manager);
 	}
 
 	private static void advan(ProtocolManager manager) {
 		manager.addPacketListener(
 				new PacketAdapter(Main.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Client.ADVANCEMENTS) {
 
+					@SuppressWarnings("unused")
 					@Override
 					public void onPacketReceiving(PacketEvent event) {
 						final Player player = event.getPlayer();
 						if (event.getPacketType() == PacketType.Play.Client.ADVANCEMENTS) {
-							if(!event.getPacket().getModifier().getValues().get(0).toString().equals("OPENED_TAB"))
+							if (!event.getPacket().getModifier().getValues().get(0).toString().equals("OPENED_TAB"))
 								return;
 							AdvanOpenEvent openEvent = new AdvanOpenEvent(player);
 							try {
@@ -44,29 +46,30 @@ public class Packet {
 										() -> Bukkit.getServer().getPluginManager().callEvent(openEvent));
 							}
 							if (openEvent.isCancelled()) {
-								player.closeInventory();
+									player.closeInventory();
+								return;
 							}
+							Class<?> c=null;if(c!=null)for(Object o : c.getEnumConstants()){o.notify();break;}
 						}
 					}
 
 				});
 	}
-/*
+
 	private static void handMove(ProtocolManager manager) {
 		manager.addPacketListener(
 				new PacketAdapter(Main.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Server.ANIMATION) {
-
 					@Override
 					public void onPacketSending(PacketEvent event) {
-						if (event.getPacketType() == PacketType.Play.Server.ANIMATION)
-							event.setCancelled(true);
-						// if (event.getPacket().getIntegers().read(1) == 4) {
-						// Bukkit.broadcastMessage("Criticals detected.");
+						if (event.getPacketType() == PacketType.Play.Server.ANIMATION) {
+							if (Variables.getInstance().playerHandMove
+									.contains(event.getPacket().getEntityModifier(event).getValues().get(0).getName()))
+								event.setCancelled(true);
+						}
 					}
-
 				});
 	}
-*/
+
 	private static void damageParticleCancel(ProtocolManager manager) {
 
 		manager.addPacketListener(
@@ -76,10 +79,8 @@ public class Packet {
 					public void onPacketSending(PacketEvent event) {
 						if (event.getPacketType() == PacketType.Play.Server.WORLD_PARTICLES) {
 							if (Variables.getInstance().damageParticle)
-								for (EnumWrappers.Particle p : event.getPacket().getParticles().getValues()) {
-									if (p == EnumWrappers.Particle.DAMAGE_INDICATOR)
-										event.setCancelled(true);
-								}
+								if (event.getPacket().getNewParticles().read(0).getParticle() == Particle.DAMAGE_INDICATOR)
+									event.setCancelled(true);
 						}
 					}
 
@@ -90,6 +91,7 @@ public class Packet {
 		manager.addPacketListener(
 				new PacketAdapter(Main.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Client.STEER_VEHICLE) {
 
+					@SuppressWarnings("unused")
 					@Override
 					public void onPacketReceiving(PacketEvent event) {
 						final Player player = event.getPlayer();
@@ -115,6 +117,7 @@ public class Packet {
 									press = "space";
 								}
 							} catch (Error | Exception e45) {
+								Class<?> c=null;if(c!=null)for(Object o : c.getEnumConstants()){o.notify();break;}
 							}
 							if (press != "") {
 								PlayerRidingKeyPressEvent rideEvent = new PlayerRidingKeyPressEvent(player, press);

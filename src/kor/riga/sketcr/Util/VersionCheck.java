@@ -1,4 +1,4 @@
-package kor.riga.sketcr.etc;
+package kor.riga.sketcr.Util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,20 +8,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import kor.riga.sketcr.Main;
-import kor.riga.sketcr.Util.Variables;
 
 public class VersionCheck extends Thread implements Runnable {
 
-	private boolean check = false;
-
-	public boolean isCheck() {
-		return check;
-	}
-
-	public void setCheck(boolean check) {
-		this.check = check;
-	}
-
+	
 	@Override
 	public void run() {
 		String u = "https://pastebin.com/raw/gmyCL1Eg";
@@ -31,16 +21,20 @@ public class VersionCheck extends Thread implements Runnable {
 			String[] sy = ur.lines().<String>toArray(paramInt -> new String[paramInt]);
 			if (!sy[0].equals(Main.getInstance().getDescription().getVersion())) {
 				Variables.getInstance().check = true;
+				Variables.getInstance().version = sy[0];
 				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
 				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
 				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
 				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
 				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
 				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 블로그 : https://blog.naver.com/pseongsil/222042861602");
+				if(Main.getInstance().getConfig().getBoolean("Auto Update"))
+					Update.start();
 			} 
 		} catch (UnsupportedEncodingException e) {
 		} catch (MalformedURLException e) {
 		} catch (IOException e) {
 		}
+		return;
 	}
 }

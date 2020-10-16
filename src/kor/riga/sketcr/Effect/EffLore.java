@@ -22,7 +22,6 @@ public class EffLore extends Effect {
 	public String toString(Event event, boolean b) {
 		return "Lore{%itemstack%, %number%, %string%}";
 	}
-	
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -43,29 +42,21 @@ public class EffLore extends Effect {
 		if (im.getLore() != null) {
 			l.addAll(im.getLore());
 		}
-		//String[] array = new String[] {};
-		/*if (ac.contains("||")) {
-			array = ac.split("||");
-		}
-		if (array == null) {*/
-			for (int c = l.size() - 1; c <= t; c++) {
-				try {
-					l.set(t, ac);
-				} catch (Exception e) {
-					l.add("");
-				}
-			}
-		/*} else {
-			int a = t;
+		// String[] array = new String[] {};
+		/*
+		 * if (ac.contains("||")) { array = ac.split("||"); } if (array == null) {
+		 */
+		for (int c = l.size() - 1; c <= t; c++) {
 			try {
-				for (String s : array) {
-					l.set(a, s);
-					a++;
-				}
+				l.set(t, ac);
 			} catch (Exception e) {
 				l.add("");
 			}
-		}*/
+		}
+		/*
+		 * } else { int a = t; try { for (String s : array) { l.set(a, s); a++; } }
+		 * catch (Exception e) { l.add(""); } }
+		 */
 		im.setLore(l);
 		i.setItemMeta(im);
 	}
