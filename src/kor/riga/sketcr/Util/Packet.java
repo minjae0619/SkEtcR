@@ -46,6 +46,7 @@ public class Packet {
 										() -> Bukkit.getServer().getPluginManager().callEvent(openEvent));
 							}
 							if (openEvent.isCancelled()) {
+								if(player.getOpenInventory().getTitle().equals("container.crafting"))
 									player.closeInventory();
 								return;
 							}
