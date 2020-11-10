@@ -58,7 +58,7 @@ public class ExpMagicCooldown extends SimpleExpression<Float> {
     @Override
     public void change(Event event, Object[] d, ChangeMode mode){
 		if (mode == ChangeMode.SET) {
-			float i = (float) d[0];
+			float i = ((Number)d[0]).floatValue();
 			String str = this.str.getSingle(event);
 			Player player = this.player.getSingle(event);
 			try {
@@ -73,7 +73,7 @@ public class ExpMagicCooldown extends SimpleExpression<Float> {
 	@Override
     public Class<?>[] acceptChange(final ChangeMode mode) {
     	if(mode == ChangeMode.SET) {
-    		return (Class[])CollectionUtils.array(new Class[] { String.class });
+    		return (Class[])CollectionUtils.array(new Class[] { Number.class });
     	}
     	return null;
     }

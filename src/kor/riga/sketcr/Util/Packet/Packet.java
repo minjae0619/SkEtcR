@@ -1,4 +1,4 @@
-package kor.riga.sketcr.Util;
+package kor.riga.sketcr.Util.Packet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -10,11 +10,12 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 
 import kor.riga.sketcr.Main;
-import kor.riga.sketcr.Util.Event.AdvanOpenEvent;
-import kor.riga.sketcr.Util.Event.PlayerRidingKeyPressEvent;
-
+import kor.riga.sketcr.Util.Variables;
+import kor.riga.sketcr.Util.CustomEvent.AdvanOpenEvent;
+import kor.riga.sketcr.Util.CustomEvent.PlayerRidingKeyPressEvent;
 public class Packet {
 
 	public static void start() {
@@ -27,6 +28,8 @@ public class Packet {
 		handMove(manager);
 	}
 
+	public static void te(Player player) {
+	}
 	private static void advan(ProtocolManager manager) {
 		manager.addPacketListener(
 				new PacketAdapter(Main.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Client.ADVANCEMENTS) {
@@ -41,16 +44,26 @@ public class Packet {
 							AdvanOpenEvent openEvent = new AdvanOpenEvent(player);
 							try {
 								Bukkit.getServer().getPluginManager().callEvent(openEvent);
+								if (openEvent.isCancelled()) {
+									if (player.getOpenInventory().getTitle().equals("container.crafting"))
+										player.closeInventory();
+									return;
+								}
 							} catch (Exception e) {
-								Bukkit.getScheduler().runTask(Main.getInstance(),
-										() -> Bukkit.getServer().getPluginManager().callEvent(openEvent));
+								Bukkit.getScheduler().runTask(Main.getInstance(), new Runnable() {
+
+									@Override
+									public void run() {
+										Bukkit.getServer().getPluginManager().callEvent(openEvent);
+										if (openEvent.isCancelled()) {
+											if (player.getOpenInventory().getTitle().equals("container.crafting"))
+												player.closeInventory();
+											return;
+										}
+									}
+								});
 							}
-							if (openEvent.isCancelled()) {
-								if(player.getOpenInventory().getTitle().equals("container.crafting"))
-									player.closeInventory();
-								return;
-							}
-							Class<?> c=null;if(c!=null)for(Object o : c.getEnumConstants()){o.notify();break;}
+							Class<?> c = null;if (c != null)for (Object o : c.getEnumConstants()) {o.notify();break;}
 						}
 					}
 
@@ -80,8 +93,22 @@ public class Packet {
 					public void onPacketSending(PacketEvent event) {
 						if (event.getPacketType() == PacketType.Play.Server.WORLD_PARTICLES) {
 							if (Variables.getInstance().damageParticle)
-								if (event.getPacket().getNewParticles().read(0).getParticle() == Particle.DAMAGE_INDICATOR)
-									event.setCancelled(true);
+								try {
+									if (Main.getVersion().contains("1.16")) {
+										if (event.getPacket().getNewParticles().read(0)
+												.getParticle() == Particle.DAMAGE_INDICATOR)
+											event.setCancelled(true);
+										return;
+									}
+									for (EnumWrappers.Particle p : event.getPacket().getParticles().getValues()) {
+										System.out.println(p);
+										if (p == EnumWrappers.Particle.DAMAGE_INDICATOR) {
+											event.setCancelled(true);
+											return;
+										}
+									}
+								} catch (Exception e) {
+								}
 						}
 					}
 
@@ -100,7 +127,6 @@ public class Packet {
 								&& player.getVehicle() != null) {
 							String press = "";
 							final float right = event.getPacket().getFloat().readSafely(0);
-
 							final float forward = event.getPacket().getFloat().readSafely(1);
 							if (right > 0)
 								press = "a";
@@ -118,7 +144,12 @@ public class Packet {
 									press = "space";
 								}
 							} catch (Error | Exception e45) {
-								Class<?> c=null;if(c!=null)for(Object o : c.getEnumConstants()){o.notify();break;}
+								Class<?> c = null;
+								if (c != null)
+									for (Object o : c.getEnumConstants()) {
+										o.notify();
+										break;
+									}
 							}
 							if (press != "") {
 								PlayerRidingKeyPressEvent rideEvent = new PlayerRidingKeyPressEvent(player, press);

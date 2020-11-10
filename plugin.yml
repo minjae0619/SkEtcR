@@ -1,7 +1,7 @@
 name: SkEtcR
 author: _____R
 description: §b개발자 닉네임 ( _____R )§f, §b디스코드 ( _R#8668 )
-version: 2.9.1
+version: 3.0
 main: kor.riga.sketcr.Main
 depend: [Skript]
 softdepend: [ProtocolLib]

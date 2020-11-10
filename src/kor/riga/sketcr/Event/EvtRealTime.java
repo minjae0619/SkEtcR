@@ -5,7 +5,7 @@ import org.bukkit.event.Event;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptEvent;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import kor.riga.sketcr.Util.Event.RealTimeEvent;
+import kor.riga.sketcr.Util.CustomEvent.RealTimeEvent;
 
 public class EvtRealTime extends SkriptEvent {
 

@@ -9,7 +9,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import kor.riga.sketcr.Util.Event.PlayerRidingKeyPressEvent;
+import kor.riga.sketcr.Util.CustomEvent.PlayerRidingKeyPressEvent;
 
 public class ExpRidingKey extends SimpleExpression<String> {
 	

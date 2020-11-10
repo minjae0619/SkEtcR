@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.NotePlayEvent;
@@ -13,6 +14,7 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -26,8 +28,9 @@ import com.nisovin.magicspells.events.SpellCastEvent;
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.ExpressionType;
 import kor.riga.sketcr.Command.MainCommand;
-import kor.riga.sketcr.Condition.CommandAynchronous;
+import kor.riga.sketcr.Condition.CondCommandAynchronous;
 import kor.riga.sketcr.Condition.CondEven;
+import kor.riga.sketcr.Condition.CondInventoryFull;
 import kor.riga.sketcr.Effect.EFFBossbar;
 import kor.riga.sketcr.Effect.EFFBroadcastBossbar;
 import kor.riga.sketcr.Effect.EFFMessageBox;
@@ -45,6 +48,7 @@ import kor.riga.sketcr.Effect.EffCallDamage;
 import kor.riga.sketcr.Effect.EffCallDeath;
 import kor.riga.sketcr.Effect.EffCallJoin;
 import kor.riga.sketcr.Effect.EffCallQuit;
+import kor.riga.sketcr.Effect.EffChangeYawPitch;
 import kor.riga.sketcr.Effect.EffCmdOp;
 import kor.riga.sketcr.Effect.EffColorGlow;
 import kor.riga.sketcr.Effect.EffColorunGlow;
@@ -57,6 +61,7 @@ import kor.riga.sketcr.Effect.EffOpenInv;
 import kor.riga.sketcr.Effect.EffParticle;
 import kor.riga.sketcr.Effect.EffParticle2;
 import kor.riga.sketcr.Effect.EffParticle3;
+import kor.riga.sketcr.Effect.EffParticleBeam;
 import kor.riga.sketcr.Effect.EffPlayerResourcePack;
 import kor.riga.sketcr.Effect.EffPotionClear;
 import kor.riga.sketcr.Effect.EffResourceDisable;
@@ -109,20 +114,42 @@ import kor.riga.sketcr.Expression.ExpRidingKey;
 import kor.riga.sketcr.Expression.ExpSort;
 import kor.riga.sketcr.Expression.ExpTime;
 import kor.riga.sketcr.Expression.ExplineChange;
-import kor.riga.sketcr.Util.Packet;
 import kor.riga.sketcr.Util.Repeat;
 import kor.riga.sketcr.Util.VersionCheck;
-import kor.riga.sketcr.Util.Event.AdvanOpenEvent;
-import kor.riga.sketcr.Util.Event.PlayerRidingKeyPressEvent;
-import kor.riga.sketcr.Util.Event.RealTimeEvent;
+import kor.riga.sketcr.Util.CustomEvent.AdvanOpenEvent;
+import kor.riga.sketcr.Util.CustomEvent.PlayerRidingKeyPressEvent;
+import kor.riga.sketcr.Util.CustomEvent.RealTimeEvent;
+import kor.riga.sketcr.Util.Packet.Packet;
 
 public class Main extends JavaPlugin implements Listener {
+	
+	
+
 	private static Main instance = null;
 
+	private static final String VERSION = Bukkit.getServer().getBukkitVersion().split("-")[0];
+	
 	public static Main getInstance() {
 		return instance;
 	}
-
+	
+	public static String getVersion() {
+		return VERSION;
+	}
+	public static int getIntVersion() {
+		return Integer.parseInt(VERSION.replaceAll(".", ""));
+	}
+	
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				Packet.te(event.getPlayer());
+			}
+		}, 40L);
+	}
 	@SuppressWarnings("unused")
 	@Override
 	public void onEnable() {
@@ -252,13 +279,14 @@ public class Main extends JavaPlugin implements Listener {
 			Skript.registerEffect(EffLore.class, new String[] { "lore{%itemstack%, %number%, %string%}" });
 			Skript.registerEffect(LoreClear.class, new String[] { "clear lore of %itemstack%" });
 			Skript.registerEffect(EFFMessageBox.class, new String[] { "messagebox %string%" });
+			Skript.registerEffect(EffChangeYawPitch.class, new String[] { "change yaw %number% pitch %number% (to|for) %player%" });
 			Skript.registerEffect(EFFRunCmdCommand.class, new String[] { "run cmd command %string%" });
 			Skript.registerEffect(EffParticle.class, new String[] {
 					"particle %string% of %integer% at %location% ([offset]XYZ|RGB) %double%[,] %double%[,] %double%" });
 			Skript.registerEffect(EffParticle2.class, new String[] {
 					"particle spring %string% at %location% height %double% width %double% RGB %double%[,] %double%[,] %double%" });
-			Skript.registerEffect(EffParticle3.class, new String[] {
-					"particle beam %string% at %location% length %integer% gap %double% RGB %double%[,] %double%[,] %double%" });
+			Skript.registerEffect(EffParticle3.class, new String[] {"particle beam %string% at %location% length %integer% gap %double% RGB %double%[,] %double%[,] %double%" });
+			Skript.registerEffect(EffParticleBeam.class, new String[] {"particle beam %string% at %location% damage %double% length %integer% gap %double% RGB %double%[,] %double%[,] %double%" });
 			Skript.registerEffect(Memory.class, new String[] { "memory optimize" });
 			Skript.registerEvent("Player Move", EvtPlayerMove.class, PlayerMoveEvent.class,
 					"player move [of] [%string%][,] [%string%][,] [%string%]");
@@ -274,8 +302,9 @@ public class Main extends JavaPlugin implements Listener {
 					"player i[tem][ ]damage");
 			Skript.registerEvent("inv pickup", EvtInventoryPickup.class, InventoryPickupItemEvent.class,
 					"[inventory] pickup item");
-			Skript.registerCondition(CommandAynchronous.class, "command (1¦is|2¦is(n't| not)) exist");
+			Skript.registerCondition(CondCommandAynchronous.class, "command (1¦is|2¦is(n't| not)) exist");
 			Skript.registerCondition(CondEven.class, "%number% (1¦is|2¦is(n't| not)) even");
+			Skript.registerCondition(CondInventoryFull.class, "%inventory% (1¦is|2¦is(n't| not)) full");
 			// Skript.registerCondition(CondKeepInventory.class, "inventory (1¦is|2¦is(n't|
 			// not)) keep");
 			// MagicSpells

@@ -2,7 +2,6 @@ package kor.riga.sketcr.Expression;
 
 import java.text.DecimalFormat;
 
-
 import org.bukkit.event.Event;
 
 import ch.njol.skript.lang.Expression;
@@ -41,5 +40,4 @@ public class ExpComma extends SimpleExpression<String> {
     public Class<? extends String> getReturnType(){
     	return String.class;
     }
- 
 }

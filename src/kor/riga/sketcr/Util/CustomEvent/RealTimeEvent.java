@@ -1,4 +1,4 @@
-package kor.riga.sketcr.Util.Event;
+package kor.riga.sketcr.Util.CustomEvent;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

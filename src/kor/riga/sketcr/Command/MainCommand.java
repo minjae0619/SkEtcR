@@ -13,7 +13,7 @@ public class MainCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!cmd.getName().equals("sketcr")) return false;
+		if(!cmd.getName().equalsIgnoreCase("sketcr")) return false;
 		if(args.length == 0) {
 			sender.sendMessage("§a[ SkEtcR ] /sketcr update");
 			return false;
@@ -26,4 +26,5 @@ public class MainCommand implements CommandExecutor {
 		}
 		return false;
 	}
+	
 }

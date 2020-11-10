@@ -1,18 +1,17 @@
-package kor.riga.sketcr.Util.Event;
+package kor.riga.sketcr.Util.CustomEvent;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
-public class CustomEvent extends PlayerEvent implements Cancellable{
+public class AdvanOpenEvent extends PlayerEvent implements Cancellable{
 	private static final HandlerList handlers = new HandlerList();
 	
 	private boolean cancel;
 	
-	private Object[] objects;
 
-	public CustomEvent(Player player) {
+	public AdvanOpenEvent(Player player) {
 		super(player);
 	}
 

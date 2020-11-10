@@ -33,6 +33,7 @@ public class EffMagicTeach extends Effect {
 		String str = this.str.getSingle(event);
 		Player player = this.player.getSingle(event);
 		try {
+			//MagicSpells.getVariableManager().
 			MagicSpells.teachSpell(player, str);
 		} catch (Exception e) {
 			System.out.println(str + "은 존재하지 않는 스펠명입니다!");

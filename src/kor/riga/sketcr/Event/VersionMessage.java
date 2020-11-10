@@ -34,7 +34,7 @@ public class VersionMessage implements Listener {
 						player.sendMessage("§a[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
 						player.sendMessage("§a[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
 						player.sendMessage("§a[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
-						player.sendMessage("§a[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 애드온 다운로드 블로그 : https://blog.naver.com/pseongsil/222042861602");
+						player.sendMessage("§a[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전 다운로드 주소 : https://www.spigotmc.org/resources/skript-addon-sketcr.83787/");
 					}
 				}, 15L);
 			}

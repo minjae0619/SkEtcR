@@ -6,7 +6,7 @@ import java.util.Calendar;
 import org.bukkit.Bukkit;
 
 import kor.riga.sketcr.Main;
-import kor.riga.sketcr.Util.Event.RealTimeEvent;
+import kor.riga.sketcr.Util.CustomEvent.RealTimeEvent;
 
 public class Repeat{
 

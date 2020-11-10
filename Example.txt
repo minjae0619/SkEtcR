@@ -855,9 +855,8 @@ Event:
    ex)
      on player jump:
           broadcast "점프"
-          
-          
-          
+
+
 ------------------------ 2.9.1
 
 
@@ -866,4 +865,51 @@ etc:
     advan open (L키) 이벤트 동작 후 cancel event 사용 시 gui가 열리지 않는 버그 수정
     
     
+
+----------------------- 3.0
+
+etc:
+
+  on player move of "y": 구문이 작동하지 않는 버그 수정
+
+
+-----
+
+Condition:
+
+   %inventory% (1¦is|2¦is(n't| not)) full
+
+   ex)
+       on command "기본템":
+             if player's inventory is full:
+                 send "인벤토리에 공간이 부족합니다" 
+                 stop
+            give 기본템
+    
+   ex2)         
+       on command "기본템":
+            if player's inventory is not full:
+                 give 기본템
+            else:
+                 send "인벤토리에 공간이 부족합니다"
+
+
+------
+
+Effect:
+
+    change yaw %number% pitch %number% to %player%
+
+    (ProtocolLib 사용 X )
+    (config에 "Packet"이 false여도 사용 가능)
+    (텔레포트가 아닌 패킷을 사용해 자연스러움)
  
+    ex)
+       command /change [<number>] [<number>]:
+           trigger:
+              change yaw arg 1 pitch arg 2 to player
+
+    ex2)
+         command /반동:
+           trigger:
+              change yaw player's yaw pitch player's pitch-0.3 to player

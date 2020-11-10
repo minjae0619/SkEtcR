@@ -27,7 +27,7 @@ public class VersionCheck extends Thread implements Runnable {
 				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
 				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
 				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전이 존재합니다 ( 문의 : _R#8668 )");
-				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 블로그 : https://blog.naver.com/pseongsil/222042861602");
+				System.out.println("[SkEtcR v"+Main.getInstance().getDescription().getVersion()+"] 최신버전 다운로드 주소 : https://www.spigotmc.org/resources/skript-addon-sketcr.83787/");
 				if(Main.getInstance().getConfig().getBoolean("Auto Update"))
 					Update.start();
 			} 
