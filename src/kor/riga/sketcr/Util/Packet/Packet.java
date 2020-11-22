@@ -28,8 +28,6 @@ public class Packet {
 		handMove(manager);
 	}
 
-	public static void te(Player player) {
-	}
 	private static void advan(ProtocolManager manager) {
 		manager.addPacketListener(
 				new PacketAdapter(Main.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Client.ADVANCEMENTS) {
@@ -85,7 +83,6 @@ public class Packet {
 	}
 
 	private static void damageParticleCancel(ProtocolManager manager) {
-
 		manager.addPacketListener(
 				new PacketAdapter(Main.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Server.WORLD_PARTICLES) {
 
@@ -101,7 +98,6 @@ public class Packet {
 										return;
 									}
 									for (EnumWrappers.Particle p : event.getPacket().getParticles().getValues()) {
-										System.out.println(p);
 										if (p == EnumWrappers.Particle.DAMAGE_INDICATOR) {
 											event.setCancelled(true);
 											return;

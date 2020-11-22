@@ -635,7 +635,8 @@ Effect:
          add "%loop-index%" to {_index::*}
      sort index {_index::*} value {_value::*} in "테스트"
      loop size of {테스트value::*} times:
-         broadcast "%{테스트index::%loop-num%}% : %{테스트value::%loop-num%}%"      delete {테스트index::*}
+         broadcast "%{테스트index::%loop-num%}% : %{테스트value::%loop-num%}%"   
+     delete {테스트index::*}
      delete {테스트value::*}
 
 --------   
@@ -913,3 +914,31 @@ Effect:
          command /반동:
            trigger:
               change yaw player's yaw pitch player's pitch-0.3 to player
+
+
+
+
+
+
+
+
+------------------------------------ v3.0.1
+
+
+etc:
+ 
+    파티클이 소환될 때 버킷이 도배되는 버그 수정
+
+
+Effect:
+
+
+ reset weather to %player% - 플레이어의 날씨를 초기화합니다
+ reset time to %player% - 플레이어의 시간을 초기화합니다
+
+
+  ex)
+     on command "초기화":
+         reset weather to player
+         reset time to player
+

@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.NotePlayEvent;
@@ -14,7 +13,6 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.entity.SlimeSplitEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -64,6 +62,8 @@ import kor.riga.sketcr.Effect.EffParticle3;
 import kor.riga.sketcr.Effect.EffParticleBeam;
 import kor.riga.sketcr.Effect.EffPlayerResourcePack;
 import kor.riga.sketcr.Effect.EffPotionClear;
+import kor.riga.sketcr.Effect.EffResetPlayerTime;
+import kor.riga.sketcr.Effect.EffResetPlayerWeather;
 import kor.riga.sketcr.Effect.EffResourceDisable;
 import kor.riga.sketcr.Effect.EffResourceEnable;
 import kor.riga.sketcr.Effect.EffSort;
@@ -139,17 +139,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static int getIntVersion() {
 		return Integer.parseInt(VERSION.replaceAll(".", ""));
 	}
-	
-	@EventHandler
-	public void onJoin(PlayerJoinEvent event) {
-		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-			
-			@Override
-			public void run() {
-				Packet.te(event.getPlayer());
-			}
-		}, 40L);
-	}
+
 	@SuppressWarnings("unused")
 	@Override
 	public void onEnable() {
@@ -276,6 +266,8 @@ public class Main extends JavaPlugin implements Listener {
 			Skript.registerEffect(EffPotionClear.class, new String[] { "clear %player%'s potion[s]" });
 			Skript.registerEffect(EffColorGlow.class, new String[] { "color glow %string% to %entity%" });
 			Skript.registerEffect(EffColorunGlow.class, new String[] { "color unglow %string% to %entity%" });
+			Skript.registerEffect(EffResetPlayerWeather.class, new String[] { "reset weather to %player%" });
+			Skript.registerEffect(EffResetPlayerTime.class, new String[] { "reset time to %player%" });
 			Skript.registerEffect(EffLore.class, new String[] { "lore{%itemstack%, %number%, %string%}" });
 			Skript.registerEffect(LoreClear.class, new String[] { "clear lore of %itemstack%" });
 			Skript.registerEffect(EFFMessageBox.class, new String[] { "messagebox %string%" });
