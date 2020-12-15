@@ -62,7 +62,18 @@ public class NMS {
 		}
 	}
 
+	static Class<?> getCraftBukkitClass(String name) {
+		try {
+			return Class.forName("org.bukkit.craftbukkit." + getNmsVersion() + "." + name);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	public static void changePositionPacket(Player player, float yaw, float pitch) {
+		//PacketPlayOutPosition packet = new PacketPlayOutPosition(1, 1, 1, 1, 1, null, 1);
+		//((CraftPlayer)player).getHandle().playerConnection.sendPacket("");
+		
 		try {
 			Object packet = null;
 			Class<?> craftPlayerClass = getCraftPlayerClass();

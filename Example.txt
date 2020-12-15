@@ -942,3 +942,115 @@ Effect:
          reset weather to player
          reset time to player
 
+----------------------------------- v3.1
+
+
+etc:
+  -  패킷관련 에러 수정
+  -  자동 업데이트 지원 중단
+  - on mdamage:에서만 사용가능하던 mid가 on damage에서도 사용 가능해졌습니다. ( 매직스펠 공격이 아닐 경우 <none> )
+  
+
+----
+Condition:
+     attack (1¦is|2¦is(n't| not)) magic  - 해당 공격이 매직스펠 공격인지 인식
+
+    ex)
+       on damage:
+           if attack is magic:
+               broadcast "매직스펠 공격"
+    
+    
+
+---------------------
+MythicMob:
+
+Type:
+
+   타입명 : mythicmob
+
+   %mythicmob% = 해당 미스틱몹의 이름
+
+   type of %mythicmob%, %mythicmob%'s type = 해당 미스틱몹의 엔티티 타입
+
+   name of %mythicmob%, %mythicmob%'s name = 해당 미스틱몹의 이름 
+
+   파싱 :
+       "%uuid of entity%" parsed as mythicmob
+
+-----
+
+Condition:
+   %entity% (1¦is|2¦is(n't| not)) (mm|mythicmythicmob[s])
+
+
+   ex)
+       on right click on entity:
+            if event-entity is mm:
+                  broadcast "미스틱몹"
+		
+        on damage:
+            if victim is mm:
+	broadcast "미스틱몹"	
+		
+
+Event:
+
+ 관련 Expression:
+    event-mythicmob ( mythicmob 타입을 반환합니다 )
+    event-entity ( entity 타입을 반환합니다 )  
+    event-location (location 타입을 반환합니다 )
+
+----
+ (mm|mythicmob[s]) spawn
+
+ ex)
+    on mm spawn:
+        set {_mythicmob} to event-mythicmob
+--
+
+ (mm|mythicmob[s]) despawn
+
+ ex)
+    on mm despawn:
+        set {_mythicmob} to event-mythicmob
+
+--
+
+ (mm|mythicmob[s]) death
+
+ ex)
+    on mm death:
+        set {_mythicmob} to event-mythicmob
+
+----
+
+Expression:
+    
+  (damage of %mythicmob%|%mythicmob%'s damage) - %mythicmob%의 데미지  ※ set 불가능
+     ex)
+       broadcast "%damage of event-mythicmob%"
+ 
+---
+   (level of %mythicmob%|%mythicmob%'s level) - %mythicmob%의 레벨
+     ex)
+       if level of event-mythicmob < 5:
+            add 1 to event-mythicmob's level
+            remove 1 from event-mythicmob's level
+            set event-mythicmob's level to 10
+
+  
+----
+
+Effect:
+
+  spawn %string% at %location% - %string%의 미스틱몹을 %location%에 소환합니다
+
+
+   ex)
+      on command "test":
+            spawn "SkeletalKnight" at player's location
+
+
+
+

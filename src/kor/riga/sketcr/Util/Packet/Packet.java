@@ -74,9 +74,11 @@ public class Packet {
 					@Override
 					public void onPacketSending(PacketEvent event) {
 						if (event.getPacketType() == PacketType.Play.Server.ANIMATION) {
-							if (Variables.getInstance().playerHandMove
-									.contains(event.getPacket().getEntityModifier(event).getValues().get(0).getName()))
-								event.setCancelled(true);
+							try {
+								if (Variables.getInstance().playerHandMove.contains(event.getPacket().getEntityModifier(event).getValues().get(0).getName()))
+									event.setCancelled(true);
+							} catch (Exception e) {
+							}
 						}
 					}
 				});

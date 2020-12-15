@@ -4,10 +4,11 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/API/ProtocolLib - 1.15.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/API/Skript 2.2dev37c.jar"/>
-	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/API/MagicSpells-3.5-Release.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/spigot-1.12.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/spigot-1.15.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/spigot-1.16.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/spigot-1.16.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/API/MythicMobs(4.9.1) - 1.12.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/mj/Desktop/ETC/bukkit/API/MagicSpells-3.5-Release - 1.12.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,12 +1,10 @@
 # 개발자 닉네임: _____R
 # 개발자 디스코드: _R#8668
-# 최신버전 다운로드 주소:  https://www.spigotmc.org/resources/skript-addon-sketcr.83787/
+# 최신버전 다운로드 주소1:  https://www.spigotmc.org/resources/skript-addon-sketcr.83787/
+# 최신버전 다운로드 주소2:  https://forums.skunity.com/resources/sketcr.1227/
+
 # 아이디어 뱅크: 짖지리#6654 ( 블로그 : https://blog.naver.com/pseongsil/)
 
 
 Packet: true
 # true일 경우 패킷 관련 구문을 사용하실 수 있습니다
-Auto Update: false
-# true일 경우 서버를 오픈할 때 자동으로 Update 폴더 내에 최신 버전이 다운로드 됩니다.
-# false일 경우 /sketcr update를 이용하여 업데이트가 가능합니다.
-# 서버가 열려있는 도중 /sketcr update를 사용할 경우 최신 버전이 존재하는지 다시 한번 체크합니다.

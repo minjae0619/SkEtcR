@@ -4,8 +4,6 @@ import java.io.File;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.NotePlayEvent;
@@ -20,11 +18,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import com.nisovin.magicspells.events.SpellApplyDamageEvent;
-import com.nisovin.magicspells.events.SpellCastEvent;
-
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.ExpressionType;
+import kor.riga.sketcr.API.API;
 import kor.riga.sketcr.Command.MainCommand;
 import kor.riga.sketcr.Condition.CondCommandAynchronous;
 import kor.riga.sketcr.Condition.CondEven;
@@ -50,11 +46,7 @@ import kor.riga.sketcr.Effect.EffChangeYawPitch;
 import kor.riga.sketcr.Effect.EffCmdOp;
 import kor.riga.sketcr.Effect.EffColorGlow;
 import kor.riga.sketcr.Effect.EffColorunGlow;
-import kor.riga.sketcr.Effect.EffDisableDamageParticle;
-import kor.riga.sketcr.Effect.EffEnableDamageParticle;
 import kor.riga.sketcr.Effect.EffLore;
-import kor.riga.sketcr.Effect.EffMagicCast;
-import kor.riga.sketcr.Effect.EffMagicTeach;
 import kor.riga.sketcr.Effect.EffOpenInv;
 import kor.riga.sketcr.Effect.EffParticle;
 import kor.riga.sketcr.Effect.EffParticle2;
@@ -69,19 +61,15 @@ import kor.riga.sketcr.Effect.EffResourceEnable;
 import kor.riga.sketcr.Effect.EffSort;
 import kor.riga.sketcr.Effect.LoreClear;
 import kor.riga.sketcr.Effect.Memory;
-import kor.riga.sketcr.Event.EvtAdvanOpen;
 import kor.riga.sketcr.Event.EvtBlockGrow;
 import kor.riga.sketcr.Event.EvtInventoryPickup;
 import kor.riga.sketcr.Event.EvtItemDamage;
 import kor.riga.sketcr.Event.EvtItemMergeEvent;
 import kor.riga.sketcr.Event.EvtLocaleChange;
-import kor.riga.sketcr.Event.EvtMagicCast;
-import kor.riga.sketcr.Event.EvtMagicDamage;
 import kor.riga.sketcr.Event.EvtNotePlay;
 import kor.riga.sketcr.Event.EvtPlayerJump;
 import kor.riga.sketcr.Event.EvtPlayerMove;
 import kor.riga.sketcr.Event.EvtRealTime;
-import kor.riga.sketcr.Event.EvtRidingKeyPress;
 import kor.riga.sketcr.Event.EvtSlimeSplitEvent;
 import kor.riga.sketcr.Event.EvtToggleGlide;
 import kor.riga.sketcr.Event.ResourcePackStatusListener;
@@ -100,23 +88,16 @@ import kor.riga.sketcr.Expression.ExpFish;
 import kor.riga.sketcr.Expression.ExpGameRules;
 import kor.riga.sketcr.Expression.ExpGetInventory;
 import kor.riga.sketcr.Expression.ExpKeepInventory;
-import kor.riga.sketcr.Expression.ExpMagicAttacker;
-import kor.riga.sketcr.Expression.ExpMagicCaster;
-import kor.riga.sketcr.Expression.ExpMagicCooldown;
-import kor.riga.sketcr.Expression.ExpMagicDamage;
-import kor.riga.sketcr.Expression.ExpMagicID;
-import kor.riga.sketcr.Expression.ExpMagicVictim;
 import kor.riga.sketcr.Expression.ExpMs;
 import kor.riga.sketcr.Expression.ExpNs;
-import kor.riga.sketcr.Expression.ExpPlayerSwing;
 import kor.riga.sketcr.Expression.ExpPotion;
-import kor.riga.sketcr.Expression.ExpRidingKey;
 import kor.riga.sketcr.Expression.ExpSort;
 import kor.riga.sketcr.Expression.ExpTime;
 import kor.riga.sketcr.Expression.ExplineChange;
+import kor.riga.sketcr.Listener.EntityDamageListener;
+import kor.riga.sketcr.Type.ClassInfo;
 import kor.riga.sketcr.Util.Repeat;
 import kor.riga.sketcr.Util.VersionCheck;
-import kor.riga.sketcr.Util.CustomEvent.AdvanOpenEvent;
 import kor.riga.sketcr.Util.CustomEvent.PlayerRidingKeyPressEvent;
 import kor.riga.sketcr.Util.CustomEvent.RealTimeEvent;
 import kor.riga.sketcr.Util.Packet.Packet;
@@ -179,6 +160,7 @@ public class Main extends JavaPlugin implements Listener {
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		Bukkit.getServer().getPluginManager().registerEvents(new VersionMessage(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ResourcePackStatusListener(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new EntityDamageListener(), this);
 	}
 
 	@Override
@@ -230,6 +212,7 @@ public class Main extends JavaPlugin implements Listener {
 					new String[] { "ms of %string%" });
 			Skript.registerExpression(ExpNs.class, String.class, ExpressionType.PROPERTY,
 					new String[] { "ns of %string%" });
+			//(%itemstack%'s nbt tag of %string%|nbt tag %string% of %itemstack%)
 			Skript.registerEffect(EFFMs.class, new String[] { "start ms of %string%" });
 			Skript.registerEffect(EFFNs.class, new String[] { "start ns of %string%" });
 			Skript.registerEffect(EffPlayerResourcePack.class,
@@ -251,8 +234,6 @@ public class Main extends JavaPlugin implements Listener {
 			Skript.registerEffect(EFFStopBossbar.class, new String[] { "stop[ ]b[oss]b[ar] id %string%" });
 			Skript.registerEffect(EFFBroadcastBossbar.class, new String[] {
 					"broadcast bossbar %string% with style %string% and color %string% of id %string% for %number% seconds" });
-			// Skript.registerEffect(EFFFalling.class, new String[] { "falling block
-			// %string% with %byte% at %location%" });
 			Skript.registerEffect(EFFNoteBlockFlat.class, new String[] {
 					"play noteblock flat instrument %string% and tone %string% at %location% to %player%" });
 			Skript.registerEffect(EFFNoteBlockNatural.class, new String[] {
@@ -289,7 +270,7 @@ public class Main extends JavaPlugin implements Listener {
 			Skript.registerEvent("NotePlay", EvtNotePlay.class, NotePlayEvent.class, "note play");
 			Skript.registerEvent("merge", EvtItemMergeEvent.class, ItemMergeEvent.class, "[item] merge");
 			Skript.registerEvent("slime", EvtSlimeSplitEvent.class, SlimeSplitEvent.class, "slime split");
-			Skript.registerEvent("realtime", EvtRealTime.class, RealTimeEvent.class, "[real][ ]time at %string%");
+			Skript.registerEvent("realtime", EvtRealTime.class, RealTimeEvent.class, "[real[ ]]time at %string%");
 			Skript.registerEvent("itemDamage", EvtItemDamage.class, PlayerRidingKeyPressEvent.class,
 					"player i[tem][ ]damage");
 			Skript.registerEvent("inv pickup", EvtInventoryPickup.class, InventoryPickupItemEvent.class,
@@ -297,71 +278,14 @@ public class Main extends JavaPlugin implements Listener {
 			Skript.registerCondition(CondCommandAynchronous.class, "command (1¦is|2¦is(n't| not)) exist");
 			Skript.registerCondition(CondEven.class, "%number% (1¦is|2¦is(n't| not)) even");
 			Skript.registerCondition(CondInventoryFull.class, "%inventory% (1¦is|2¦is(n't| not)) full");
-			// Skript.registerCondition(CondKeepInventory.class, "inventory (1¦is|2¦is(n't|
-			// not)) keep");
-			// MagicSpells
-			if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
-				Skript.registerExpression(ExpPlayerSwing.class, Boolean.class, ExpressionType.PROPERTY,
-						new String[] { "%player%'s swing" });
-				Skript.registerEvent("ride", EvtRidingKeyPress.class, PlayerRidingKeyPressEvent.class,
-						"riding key press");
-				Skript.registerEvent("advan", EvtAdvanOpen.class, AdvanOpenEvent.class, "advan open");
-				Skript.registerExpression(ExpRidingKey.class, String.class, ExpressionType.PROPERTY,
-						new String[] { "event-press" });
-				Skript.registerEffect(EffEnableDamageParticle.class, new String[] { "enable damage particle" });
-				Skript.registerEffect(EffDisableDamageParticle.class, new String[] { "disable damage particle" });
-			}
-			if (Bukkit.getPluginManager().getPlugin("MagicSpells") != null) {
-				Skript.registerEffect(EffMagicTeach.class, new String[] { "[magic[ ]]teach %string% to %player%" });
-				Skript.registerEffect(EffMagicCast.class, new String[] { "[magic[ ]]cast %string% to %player%" });
-				Skript.registerExpression(ExpMagicDamage.class, Number.class, ExpressionType.PROPERTY,
-						new String[] { "m[agic][-]damage" });
-				Skript.registerExpression(ExpMagicID.class, String.class, ExpressionType.PROPERTY,
-						new String[] { "m[agic][-]id" });
-				Skript.registerExpression(ExpMagicVictim.class, Entity.class, ExpressionType.PROPERTY,
-						new String[] { "m[agic][-]victim" });
-				Skript.registerExpression(ExpMagicAttacker.class, Entity.class, ExpressionType.PROPERTY,
-						new String[] { "m[agic][-]attacker" });
-				Skript.registerExpression(ExpMagicCaster.class, Player.class, ExpressionType.PROPERTY,
-						new String[] { "m[agic][-]caster" });
-				Skript.registerExpression(ExpMagicCooldown.class, Float.class, ExpressionType.PROPERTY,
-						new String[] { "%player%['s] m[agic[ ]]cooldown of %string%" });
-				Skript.registerEvent("damage", EvtMagicDamage.class, SpellApplyDamageEvent.class, "m[agic][ ]damage");
-				Skript.registerEvent("cast", EvtMagicCast.class, SpellCastEvent.class, "m[agic][ ]cast");
-			}
+			API.registerAPIs();
+			ClassInfo.registerTypes();
 			return;
 		}
 		Class<?> c=null;if(c!=null)for(Object o : c.getEnumConstants()){o.notify();break;}
 		Bukkit.getPluginManager().disablePlugin(this);
 	}
 
-	/*
-	 * private File tempFile; private ArrayList<String> apiList;
-	 * 
-	 * private void unloadAPI() { for (String s : apiList) { File[] lf =
-	 * tempFile.getParentFile().listFiles(); if (lf != null) { for (File f : lf) {
-	 * if (f.getName().startsWith(s)) { f.delete(); } } } } }
-	 * 
-	 * private void loadAPI(String str, String str2, String url) { try { tempFile =
-	 * File.createTempFile(str, str2); InputStream rin = getResource(url);
-	 * FileOutputStream fo = new FileOutputStream(tempFile);
-	 * 
-	 * int b; while ((b = rin.read()) != -1) { fo.write(b); } rin.close();
-	 * fo.close();
-	 * 
-	 * JarUtils.extractFromJar(tempFile.getName(), tempFile.getAbsolutePath());
-	 * addClassPath(JarUtils.getJarUrl(tempFile)); apiList.add(str);
-	 * System.out.println("완료"); } catch (IOException e) { e.printStackTrace(); } }
-	 * 
-	 * private void addClassPath(final URL url) throws IOException { final
-	 * URLClassLoader sysloader = (URLClassLoader)
-	 * ClassLoader.getSystemClassLoader(); final Class<URLClassLoader> sysclass =
-	 * URLClassLoader.class; try { final Method method =
-	 * sysclass.getDeclaredMethod("addURL", new Class[] { URL.class });
-	 * method.setAccessible(true); method.invoke(sysloader, new Object[] { url }); }
-	 * catch (final Throwable t) { t.printStackTrace(); throw new
-	 * IOException("Error adding " + url + " to system classloader"); } }
-	 */
 	private void registerBoard() {
 		Bukkit.getScheduler().runTask(this, new Runnable() {
 			

@@ -14,7 +14,7 @@ public class MainCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(!cmd.getName().equalsIgnoreCase("sketcr")) return false;
-		if(args.length == 0) {
+		/*if(args.length == 0) {
 			sender.sendMessage("§a[ SkEtcR ] /sketcr update");
 			return false;
 		}
@@ -23,7 +23,7 @@ public class MainCommand implements CommandExecutor {
 			if(Variables.getInstance().check && !Main.getInstance().getConfig().getBoolean("Auto Update"))
 				Update.start();
 			else sender.sendMessage("§a[ SkEtcR ] 현재 최신 버전입니다.");
-		}
+		}*/
 		return false;
 	}
 	
