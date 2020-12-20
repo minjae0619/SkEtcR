@@ -20,6 +20,7 @@ import kor.riga.sketcr.API.MythicMobs.Event.EvtMobSpawnEvent;
 import kor.riga.sketcr.API.MythicMobs.Expression.ExpMobDamage;
 import kor.riga.sketcr.API.MythicMobs.Expression.ExpMobLevel;
 import kor.riga.sketcr.API.MythicMobs.Expression.ExpMobType;
+import kor.riga.sketcr.Type.MythicMob.ActiveMobInfo;
 public class MythicMobs {
 
 	public static MythicMob getMythicMob(ActiveMob mob) {
@@ -29,15 +30,16 @@ public class MythicMobs {
 	public static void register() {
 		if (Bukkit.getPluginManager().getPlugin("MythicMobs") == null) 
 			return;
-		
+		ActiveMobInfo.register();
 		Skript.registerExpression(ExpMobType.class, String.class, ExpressionType.PROPERTY, new String[] { "(name of %mythicmob%|%mythicmob%'s name)" });
 		Skript.registerExpression(ExpMobType.class, String.class, ExpressionType.PROPERTY, new String[] { "(type of %mythicmob%|%mythicmob%'s type)" });
 		Skript.registerExpression(ExpMobDamage.class, Double.class, ExpressionType.PROPERTY, new String[] { "(damage of %mythicmob%|%mythicmob%'s damage)" });
 		Skript.registerExpression(ExpMobLevel.class, Double.class, ExpressionType.PROPERTY, new String[] { "(level of %mythicmob%|%mythicmob%'s level)" });
 		Skript.registerCondition(CondMythicMob.class, "%entity% (1¦is|2¦is(n't| not)) (mm|mythicmob[s])");
 		Skript.registerEffect(EffMobSpawn.class, new String[] { "spawn %string% at %location%" });
-		
 		Skript.registerEvent("mm spawn", EvtMobSpawnEvent.class, MythicMobSpawnEvent.class, "(mm|mythicmob[s]) spawn");
+//		Skript.\
+		
 		EventValues.registerEventValue(MythicMobSpawnEvent.class, ActiveMob.class, new Getter<ActiveMob, MythicMobSpawnEvent>() {
 		    @Override
 		    public ActiveMob get(MythicMobSpawnEvent e) {

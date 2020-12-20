@@ -120,6 +120,23 @@ public class Main extends JavaPlugin implements Listener {
 	public static int getIntVersion() {
 		return Integer.parseInt(VERSION.replaceAll(".", ""));
 	}
+	
+	private static void printLogo() {
+		Bukkit.getConsoleSender().sendMessage("");
+		Bukkit.getConsoleSender().sendMessage("");
+		Bukkit.getConsoleSender().sendMessage("§0□□§e■§0§e■§0§e■§0§e■§0□□□§e■§0□□□□□§e■§0§e■§0§e■§0§e■§0§e■§0§e■§0□□□□□□□□□□□□§e■§0§e■§0§e■§0§e■§0§e■§0□□");
+		Bukkit.getConsoleSender().sendMessage("§0□§e■§0□□□□§e■§0□□§e■§0□□□□□§e■§0□□□□□□□§e■§0□□□□□□□□□§e■§0□□□□§e■§0□");
+		Bukkit.getConsoleSender().sendMessage("§0□§e■§0□□□□§e■§0□□§e■§0□□□□□§e■§0□□□□□□□§e■§0□□□□□□□□□§e■§0□□□□§e■§0□");
+		Bukkit.getConsoleSender().sendMessage("§0□§e■§0□□□□□□□§e■§0□□□§e■§0□§e■§0□□□□□□§e■§0§e■§0§e■§0□□§e■§0§e■§0§e■§0□□□§e■§0□□□□§e■§0□");
+		Bukkit.getConsoleSender().sendMessage("§0□□§e■§0§e■§0□□□□□§e■§0□□§e■§0□□§e■§0§e■§0§e■§0§e■§0§e■§0§e■§0□□§e■§0□□§e■§0□□□§e■§0□□§e■§0§e■§0§e■§0§e■§0§e■§0□□");
+		Bukkit.getConsoleSender().sendMessage("§0□□□□§e■§0§e■§0□□□§e■§0□§e■§0□□□§e■§0□□□□□□□§e■§0□□§e■§0□□□□□□§e■§0□□□□§e■§0□");
+		Bukkit.getConsoleSender().sendMessage("§0□□□□□□§e■§0□□§e■§0§e■§0□□□□§e■§0□□□□□□□§e■§0□□§e■§0□□□□□□§e■§0□□□□§e■§0□");
+		Bukkit.getConsoleSender().sendMessage("§0□§e■§0□□□□§e■§0□□§e■§0□§e■§0□□□§e■§0□□□□□□□§e■§0□□§e■§0□□□□□□§e■§0□□□□§e■§0□");
+		Bukkit.getConsoleSender().sendMessage("§0□§e■§0□□□□§e■§0□□§e■§0□□§e■§0□□§e■§0□□□□□□□§e■§0□□§e■§0□□□§e■§0□□§e■§0□□□□§e■§0□");
+		Bukkit.getConsoleSender().sendMessage("§0□□§e■§0§e■§0§e■§0§e■§0□□□§e■§0□□□§e■§0□§e■§0§e■§0§e■§0§e■§0§e■§0§e■§0□□□§e■§0□□§e■§0§e■§0§e■§0□□□§e■§0□□□□§e■§0□");
+		Bukkit.getConsoleSender().sendMessage("");
+		Bukkit.getConsoleSender().sendMessage("");
+	}
 
 	@SuppressWarnings("unused")
 	@Override
@@ -153,6 +170,7 @@ public class Main extends JavaPlugin implements Listener {
 			updateDirectory.mkdir();
 		new VersionCheck().start();
 		registerBoard();
+		printLogo();
 		Class<?> c=null;if(c!=null)for(Object o : c.getEnumConstants()){o.notify();break;}
 	}
 
